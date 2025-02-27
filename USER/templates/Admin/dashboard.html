@@ -1,0 +1,649 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'USER/img/apple-icon.png' %}">
+  <link rel="icon" type="image/png" href="{% static 'USER/img/favicon.png' %}">
+  <link rel="stylesheet" href="{% static 'USER/css/style.css' %}">
+  <script src="{% static 'USER/js/script.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+  <title>
+    J.T Restaurant
+  </title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="static/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="static/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- CSS Files -->
+  <link id="pagestyle" href="static/css/material-dashboard.css?v=3.1.0" rel="stylesheet" />
+  <!-- Nepcha Analytics (nepcha.com) -->
+  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
+  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+<style>
+
+.buttons-container{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+.buttons-container .Edit-food,
+.buttons-container .Edit-drinks,
+.buttons-container .Edit-alcohol,
+.buttons-container .Edit-fries,
+.buttons-container .Edit-burgers,
+.buttons-container .Edit-pizza {
+  font-size: 1.2rem;
+  border-radius: 20%;
+}
+.buttons-container button {
+    border-radius: 10%; 
+}
+canvas {
+    max-width: 500px;
+    max-height: 500px;
+}
+
+
+</style>
+
+</head>
+
+
+<body class="g-sidenav-show  bg-gray-200">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">J.T Restaurant</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+      <ul class="navbar-nav">
+        
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white active bg-gradient-primary" href="{% url 'dashboard' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">dashboard</i>
+
+            </div>
+            <span class="nav-link-text ms-1">Dashboard</span>
+          </a>
+        </li>
+
+
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white " href="{% url 'breakfast' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">breakfast_dining</i>
+            </div>
+            <span class="nav-link-text ms-1">Breakfast</span>
+
+            {% if unread_notifications_count_by_category.Breakfast > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Breakfast }}</span>
+          {% endif %}
+
+
+          </a>
+        </li>
+
+        
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white " href="{% url 'lunch' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">lunch_dining</i>
+            </div>
+            <span class="nav-link-text ms-1">Lunch</span>
+            {% if notifications_count_by_category.Lunch > 0 %}
+              <span class="badge bg-danger">{{ notifications_count_by_category.Lunch }}</span>
+            {% endif %}
+          </a>
+        </li>
+
+
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white " href="{% url 'supper' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">restaurant</i>
+            </div>
+            <span class="nav-link-text ms-1">Supper</span>
+
+            {% if unread_notifications_count_by_category.Supper > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Supper }}</span>
+          {% endif %}
+
+
+          </a>
+        </li>
+  
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white " href="{% url 'soda' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">water_drop</i>
+            </div>
+            <span class="nav-link-text ms-1">Soda</span>
+
+            {% if unread_notifications_count_by_category.Soda > 0 %}
+              <span class="badge bg-danger">{{ unread_notifications_count_by_category.Soda }}</span>
+            {% endif %}
+
+          </a>
+        </li>
+
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white " href="{% url 'energydrink' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">electric_bolt</i>
+            </div>
+            <span class="nav-link-text ms-1">Energy Drinks</span>
+
+            {% if unread_notifications_count_by_category.Energydrink > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Energydrink }}</span>
+          {% endif %}
+
+
+          </a>
+        </li>
+       
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white " href="{% url 'water' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">water_drop</i>
+            </div>
+            <span class="nav-link-text ms-1">Water</span>
+
+            {% if unread_notifications_count_by_category.Water > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Water }}</span>
+          {% endif %}
+
+
+          </a>
+        </li>
+
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white " href="{% url 'juices' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">blender</i>
+            </div>
+            <span class="nav-link-text ms-1">Juices</span>
+
+            
+            {% if unread_notifications_count_by_category.Juices > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Juices }}</span>
+          {% endif %}
+
+          </a>
+        </li>
+
+        
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white " href="{% url 'beers' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">login</i>
+            </div>
+            <span class="nav-link-text ms-1">Beers</span>
+
+            {% if unread_notifications_count > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+          {% endif %}
+
+
+          </a>
+        </li>
+
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white " href="{% url 'wines' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">login</i>
+            </div>
+            <span class="nav-link-text ms-1">Wines</span>
+
+            {% if unread_notifications_count > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+          {% endif %}
+          
+          
+        </a>
+      </li>
+      
+      <li class="nav-item mx-2">
+          <a class="nav-link text-white " href="{% url 'whiskeys' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">login</i>
+            </div>
+            <span class="nav-link-text ms-1">Whiskeys</span>
+
+            {% if unread_notifications_count > 0 %}
+            <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+          {% endif %}
+          </a>
+      </li>
+ 
+
+
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white " href="{% url 'burgers' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">login</i>
+          </div>
+          <span class="nav-link-text ms-1">Burgers</span>
+
+          {% if unread_notifications_count > 0 %}
+          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% endif %}
+        
+        </a>
+      </li>
+
+
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white " href="{% url 'taccos' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">login</i>
+          </div>
+          <span class="nav-link-text ms-1">Taccos</span>
+
+          {% if unread_notifications_count > 0 %}
+          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% endif %}
+        </a>
+      </li>
+
+
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white " href="{% url 'pizza' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">login</i>
+          </div>
+          <span class="nav-link-text ms-1">Pizza</span>
+
+          {% if unread_notifications_count > 0 %}
+          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% endif %}
+        
+        </a> 
+      </li>
+
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white " href="{% url 'sand_wich' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">login</i>
+          </div>
+          <span class="nav-link-text ms-1">Sand Wich</span>
+
+          {% if unread_notifications_count > 0 %}
+          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% endif %}
+        
+        </a>
+      </li>
+
+
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white " href="{% url 'chips' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">login</i>
+          </div>
+          <span class="nav-link-text ms-1">Chips</span>
+
+          {% if unread_notifications_count > 0 %}
+          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% endif %}
+        
+        </a>
+      </li>
+
+
+
+        <li class="nav-item mx-4">
+          <a class="nav-link text-white " href="#">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">assignment</i>
+            </div>
+            <span class="nav-link-text ms-1">Log Out</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline">
+              <label class="form-label">Type here...</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          
+                
+            <li class="nav-item d-flex align-items-center">
+              <a href="#" class="nav-link text-body font-weight-bold px-0">
+                <i class="fa fa-user me-sm-1"></i>
+                <span class="d-sm-inline d-none">Log Out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+
+  
+    
+    <div class="container-fluid py-4">
+      <div class="row">
+        <!-- Daily Orders -->
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+              <div class="card-header p-3 pt-2">
+                  <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                      <i class="material-icons opacity-10">today</i>
+                  </div>
+                  <div class="text-end pt-1">
+                      <h5 class="text-sm mb-0">Today's Orders</h5>
+                      <h4 class="text-dark">{{ daily_orders }}</h4>
+                  </div>
+              </div>
+              <hr class="dark horizontal my-0">
+              <div class="card-footer p-3">
+                  <p class="mb-0">Total number of orders placed today.</p>
+              </div>
+          </div>
+      </div>
+      
+        <!-- Weekly Orders -->
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">date_range</i>
+              </div>
+              <div class="text-end pt-1">
+                <h5 class="text-sm mb-0">This Week's Orders</h5>
+                <h4 class="text-primary">{{ weekly_orders }}</h4>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+              <p class="mb-0">Total number of orders placed this week.</p>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Monthly Orders -->
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">calendar_today</i>
+              </div>
+              <div class="text-end pt-1">
+                <h5 class="text-sm mb-0">This Month's Orders</h5>
+                <h4 class="text-success">{{ monthly_orders }}</h4>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+              <p class="mb-0">Total number of orders placed this month.</p>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Most Placed Order -->
+        <div class="col-xl-3 col-sm-6">
+          <div class="card">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">star</i>
+              </div>
+              <div class="text-end pt-1">
+                <h5 class="text-sm mb-0">Most Ordered Item</h5>
+                <h4 class="text-info">{{ most_placed_order }}</h4>
+              </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+              <p class="mb-0">The most placed order this month.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+      <div class="buttons-container">
+  
+        <!---Edit food link-->
+        <div class="Edit-food">
+          <a href="{% url 'edit_foods' %}">
+              <button class="btn btn-dark" type="button">Edit Foods</button>
+          </a>
+        </div>
+  
+        <!---Edit drinks link-->
+        <div class="Edit-drinks">
+          <a href="{% url 'edit_drinks' %}">
+              <button class="btn btn-success" type="button">Edit Drinks</button>
+          </a>
+        </div>
+  
+        <!---Edit Alcohol link-->
+        <div class="Edit-alcohol">
+          <a href="{% url 'edit_alcohol' %}">
+              <button class="btn btn-danger" type="button">Edit Alcohol</button>
+          </a>
+        </div>
+  
+       
+  
+          <!---Edit fast foods link-->
+          <div class="Edit-Fast foods">
+            <a href="{% url 'edit_fast_foods' %}">
+                <button class="btn btn-dark" type="button">Edit Fast Foods</button>
+            </a>
+          </div>
+  
+      
+  </div>
+
+ <br>
+ <br>
+
+ <div style="display: flex; justify-content: space-between;">
+  <canvas id="myChart" width="200" height="300"></canvas>
+  <canvas id="ourChart" width="200" height="300"></canvas>
+</div>
+
+<script>
+  // Function to fetch chart data
+  async function fetchChartData() {
+      const response = await fetch("{% url 'chart_data' %}");
+      if (response.ok) {
+          const data = await response.json();
+          return data;
+      }
+      console.error("Failed to fetch chart data.");
+      return { daily_orders: [], weekly_orders: [] };
+  }
+
+
+// Function to initialize the bar chart
+async function initializeBarChart() {
+    const data = await fetchChartData(); // Fetch the daily orders data
+    const dailyOrders = data.daily_orders;
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], // X-axis labels
+            datasets: [{
+                label: 'Daily Orders', // Legend label
+                data: dailyOrders, // Y-axis data points
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgba(201, 203, 207, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(201, 203, 207, 1)'
+                ],
+                borderWidth: 1, // Thickness of the border
+            }]
+        },
+        options: {
+            responsive: true, // Makes the chart responsive to screen size
+            scales: {
+                y: {
+                    beginAtZero: true, // Ensures the Y-axis starts at 0
+                    ticks: {
+                        stepSize: 2, // Set step size for the Y-axis (e.g., 0, 5, 10, ...)
+                    },
+                },
+            },
+        },
+    });
+}
+
+// Call the function to initialize the chart
+initializeBarChart();
+
+
+  // Initialize the pie chart
+  async function initializePieChart() {
+      const data = await fetchChartData();
+      const weeklyOrders = data.weekly_orders;
+
+      const ctx = document.getElementById('ourChart').getContext('2d');
+      new Chart(ctx, {
+          type: 'pie',
+          data: {
+              labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+              datasets: [{
+                  label: 'Weekly Orders',
+                  data: weeklyOrders,
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.5)', // Red
+                      'rgba(54, 162, 235, 0.5)', // Blue
+                      'rgba(255, 206, 86, 0.5)', // Yellow
+                      'rgba(75, 192, 192, 0.5)'  // Green
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+          },
+      });
+  }
+
+  // Initialize both charts
+  initializeBarChart();
+  initializePieChart();
+</script>
+
+
+
+
+<script>
+
+
+const barChart = new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: barChartData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+});
+
+const pieChart = new Chart(document.getElementById('pieChart'), {
+    type: 'pie',
+    data: pieChartData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            const badge = this.querySelector('.badge');
+            if (badge) {
+                badge.remove(); // Remove the badge element
+            }
+        });
+    });
+
+  </script>
+
+
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+</body>
+
+</html>

@@ -410,3 +410,27 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.message
+
+
+
+class Notification(models.Model):
+    CATEGORY_CHOICES = [
+        ('Breakfast', 'Breakfast'),
+        ('Lunch', 'Lunch'),
+        ('Supper', 'Supper'),
+        ('Water', 'Water'),
+        ('Soda', 'Soda'),
+        ('Juices', 'Juices'),
+        ('Energy Drinks', 'Energy Drinks'),
+        ('Beers', 'Beers'),
+        ('Wines', 'Wines'),
+        ('Whiskeys', 'Whiskeys'),
+    ]
+
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.category} - {self.message}"

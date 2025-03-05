@@ -34,6 +34,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 
+
+
+
+from django.http import StreamingHttpResponse
+import json
+import time
+
+
 # Create your views here.
 def index(request):
     return render(request, 'USER/index.html')
@@ -60,7 +68,7 @@ def food(request):
 
             if table_number and number_of_people and number_of_people.isdigit():
                 Breakfast.objects.create(
-                    table_number= int(table_number),
+                    table_number=int(table_number),
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
@@ -71,8 +79,7 @@ def food(request):
                 order_placed = True
             else:
                 errors_present = True
-                messages.error(request, 'Invalid details for Soda. Please fill in all fields correctly.')
-
+                messages.error(request, 'Invalid details for Breakfast. Please fill in all fields correctly.')
 
         # Handling lunch
         if request.POST.get('food_item_check_2'):
@@ -81,7 +88,7 @@ def food(request):
 
             if table_number and number_of_people and number_of_people.isdigit():
                 Lunch.objects.create(
-                    table_number= int(table_number),
+                    table_number=int(table_number),
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
@@ -92,8 +99,7 @@ def food(request):
                 order_placed = True
             else:
                 errors_present = True
-                messages.error(request, 'Invalid details for Soda. Please fill in all fields correctly.')
-
+                messages.error(request, 'Invalid details for Lunch. Please fill in all fields correctly.')
 
         # Handling supper
         if request.POST.get('food_item_check_3'):
@@ -102,7 +108,7 @@ def food(request):
 
             if table_number and number_of_people and number_of_people.isdigit():
                 Supper.objects.create(
-                    table_number= int(table_number),
+                    table_number=int(table_number),
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
@@ -113,19 +119,23 @@ def food(request):
                 order_placed = True
             else:
                 errors_present = True
-                messages.error(request, 'Invalid details for Soda. Please fill in all fields correctly.')
-   
+                messages.error(request, 'Invalid details for Supper. Please fill in all fields correctly.')
 
         if order_placed:
             messages.success(request, 'Your order has been placed successfully!')
         elif not errors_present:
-            messages.error(request, 'Please provide valid details for the food item selected! ')
+            messages.error(request, 'Please provide valid details for the food item selected!')
 
     return render(request, 'USER/food.html', {
         'breakfast_items': breakfast_items,
         'lunch_items': lunch_items,
         'supper_items': supper_items,
     })
+
+
+
+
+
 
 
 #==================== HANDLES THE ADMIN SIDE OF ADDING FOODS TO THE MENU  =================>
@@ -171,6 +181,7 @@ def softdrinks(request):
         if request.POST.get('food_item_check_1'):
             food_type = request.POST.get('food_item_type_1')
             number_of_people = request.POST.get('number_of_people_1', 0)
+            
 
             if table_number and number_of_people and number_of_people.isdigit():
                 Water.objects.create(
@@ -179,9 +190,9 @@ def softdrinks(request):
                     number_of_people=int(number_of_people)
                 )
                 Notification.objects.create(
-                    message=f'New order for Water: {number_of_people} people at table {table_number}',
-                    category='Water'
-                )
+                    message=f'New order for {Water}: {number_of_people} people at table {table_number}',
+                    category=Water,
+                    is_read=False)
                 order_placed = True
             else:
                 errors_present = True
@@ -199,9 +210,10 @@ def softdrinks(request):
                     number_of_people=int(number_of_people)
                 )
                 Notification.objects.create(
-                    message=f'New order for Soda: {number_of_people} people at table {table_number}',
-                    category='Soda'
-                )
+                    message=f'New order for {Soda}: {number_of_people} people at table {table_number}',
+                    category=Soda,
+                    is_read=False)
+                
                 order_placed = True
             else:
                 errors_present = True
@@ -219,9 +231,9 @@ def softdrinks(request):
                     number_of_people=int(number_of_people)
                 )
                 Notification.objects.create(
-                    message=f'New order for Juices: {number_of_people} people at table {table_number}',
-                    category='Juices'
-                )
+                    message=f'New order for {Juices}: {number_of_people} people at table {table_number}',
+                    category=Juices,
+                    is_read=False)
                 order_placed = True
             else:
                 errors_present = True
@@ -239,9 +251,9 @@ def softdrinks(request):
                     number_of_people=int(number_of_people)
                 )
                 Notification.objects.create(
-                    message=f'New order for Energydrinks: {number_of_people} people at table {table_number}',
-                    category='Energydrinks'
-                )
+                    message=f'New order for {Energydrink}: {number_of_people} people at table {table_number}',
+                    category=Energydrink,
+                    is_read=False)
                 order_placed = True
             else:
                 errors_present = True
@@ -794,19 +806,14 @@ def chart_data(request):
 
 
 def breakfast(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Breakfast").update(is_read=True)
-
+   
     # Fetch lunch items
     breakfast_items = Breakfast.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Breakfast").count()
-
+    
     return render(request, 'Admin/breakfast.html', {
         'breakfast_items': breakfast_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 
@@ -822,218 +829,150 @@ def lunch(request):
 
     return render(request, 'Admin/lunch.html', {
         'lunch_items': lunch_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 def supper(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Supper").update(is_read=True)
-
+    
     # Fetch lunch items
     supper_items = Supper.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Supper").count()
-
+    
     return render(request, 'Admin/supper.html', {
         'supper_items': supper_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 
 def juices(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Juices").update(is_read=True)
-
+    
     # Fetch lunch items
     juices_items = Juices.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Juices").count()
-
+    
     return render(request, 'Admin/juices.html', {
         'juices_items': juices_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 def soda(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Soda").update(is_read=True)
-
+    
     # Fetch lunch items
     soda_items = Soda.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Soda").count()
-
+    
     return render(request, 'Admin/soda.html', {
         'soda_items': soda_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 
 def water(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Water").update(is_read=True)
-
+    
     # Fetch lunch items
     water_items = Water.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Water").count()
-
+    
     return render(request, 'Admin/water.html', {
         'water_items': water_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 
 def energydrink(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Energydrink").update(is_read=True)
-
+    
     # Fetch lunch items
     energydrink_items = Energydrink.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Energydrink").count()
-
+    
     return render(request, 'Admin/energydrink.html', {
         'energydrink_items': energydrink_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 
 
 def whiskeys(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Whiskeys").update(is_read=True)
-
+    
     # Fetch lunch items
     whiskeys_items = Whiskeys.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Whiskeys").count()
-
+    
     return render(request, 'Admin/whiskeys.html', {
         'whiskeys_items': whiskeys_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 def beers(request):
-       # Mark all notifications as read when viewing soda orders
-    Notification.objects.filter(is_read=False).update(is_read=True)
-
+    
     # Fetch soda items and any other necessary data
     beers_items = Beers.objects.all() 
 
-    # Count unread notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False).count()
-
+    
     return render(request, 'Admin/beers.html', {
         'beers_items': beers_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 def wines(request):
-      # Mark all notifications as read when viewing soda orders
-    Notification.objects.filter(is_read=False).update(is_read=True)
-
+    
     # Fetch soda items and any other necessary data
     wines_items = Wines.objects.all() 
 
-    # Count unread notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False).count()
-
+    
     return render(request, 'Admin/wines.html', {
         'wines_items': wines_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 
 def chips(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Chips").update(is_read=True)
 
     # Fetch lunch items
     chips_items = Chips.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Chips").count()
-
+   
     return render(request, 'Admin/chips.html', {
         'chips_items': chips_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+       })
 
 def taccos(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Taccos").update(is_read=True)
-
+   
     # Fetch lunch items
     taccos_items = Taccos.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Taccos").count()
-
+    
     return render(request, 'Admin/taccos.html', {
         'taccos_items': taccos_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+       })
 
 def burgers(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Burgers").update(is_read=True)
-
+   
     # Fetch lunch items
     burgers_items = Burgers.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Burgers").count()
-
     return render(request, 'Admin/burgers.html', {
         'burgers_items': burgers_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 def pizza(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Pizza").update(is_read=True)
-
+   
     # Fetch lunch items
     pizza_items = Pizza.objects.all()
 
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Pizza").count()
-
     return render(request, 'Admin/pizza.html', {
         'pizza_items': pizza_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 def sand_wich(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Sand_Wich").update(is_read=True)
 
-    # Fetch lunch items
+       # Fetch lunch items
     sand_wich_items = Sand_Wich.objects.all()
-
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Sand_Wich").count()
 
     return render(request, 'Admin/sand_wich.html', {
         'sand_wich_items': sand_wich_items,
-        'unread_notifications_count': unread_notifications_count,
-    })
+        })
 
 
 
 def signout(request):
     return render(request, "Admin/signout.html")
+

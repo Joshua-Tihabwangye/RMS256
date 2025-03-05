@@ -73,8 +73,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Menu.wsgi.application'
-
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -144,3 +142,4 @@ EMAIL_HOST_PASSWORD = "pvpf gkrj ahrq lfvr"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 SITE_URL = "http://localhost:8000/reset-password/{uid}/{token}/"
+

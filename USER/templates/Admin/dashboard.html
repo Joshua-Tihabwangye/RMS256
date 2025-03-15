@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{% static 'USER/css/style.css' %}">
   <script src="{% static 'USER/js/script.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 
 
   <title>
@@ -57,6 +57,16 @@ canvas {
     max-height: 500px;
 }
 
+    .notification {
+        background-color: #f1f1f1;
+        border-left: 4px solid #4CAF50;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        font-family: sans-serif;
+    }
+
+
 
 </style>
 
@@ -95,7 +105,7 @@ canvas {
             {% if unread_notifications_count_by_category.Breakfast > 0 %}
             <span class="badge bg-danger">{{ unread_notifications_count_by_category.Breakfast }}</span>
           {% endif %}
-
+          <div id="notifications"></div>
 
           </a>
         </li>
@@ -123,55 +133,49 @@ canvas {
 
             {% if unread_notifications_count_by_category.Supper > 0 %}
             <span class="badge bg-danger">{{ unread_notifications_count_by_category.Supper }}</span>
-          {% endif %}
-
-
+            {% endif %}
           </a>
         </li>
   
         <li class="nav-item mx-1">
-          <a class="nav-link text-white " href="{% url 'soda' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">water_drop</i>
-            </div>
-            <span class="nav-link-text ms-1">Soda</span>
+          <a class="nav-link text-white" href="{% url 'soda' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">water_drop</i>
+              </div>
+              <span class="nav-link-text ms-1">Soda</span>
 
             {% if unread_notifications_count_by_category.Soda > 0 %}
               <span class="badge bg-danger">{{ unread_notifications_count_by_category.Soda }}</span>
             {% endif %}
-
           </a>
-        </li>
-
-        <li class="nav-item mx-1">
-          <a class="nav-link text-white " href="{% url 'energydrink' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">electric_bolt</i>
-            </div>
-            <span class="nav-link-text ms-1">Energy Drinks</span>
-
-            {% if unread_notifications_count_by_category.Energydrink > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Energydrink }}</span>
-          {% endif %}
-
-
+      </li>
+      
+      <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'energydrink' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">electric_bolt</i>
+              </div>
+              <span class="nav-link-text ms-1">Energy Drinks</span>
+              
+            {% if unread_notifications_count_by_category.Energydrinks > 0 %}
+              <span class="badge bg-danger">{{ unread_notifications_count_by_category.Energydrinks }}</span>
+            {% endif %}
           </a>
-        </li>
-       
-        <li class="nav-item mx-2">
-          <a class="nav-link text-white " href="{% url 'water' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">water_drop</i>
-            </div>
-            <span class="nav-link-text ms-1">Water</span>
+      </li>
+      
+      <li class="nav-item mx-2">
+          <a class="nav-link text-white" href="{% url 'water' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">water_drop</i>
+              </div>
+              <span class="nav-link-text ms-1">Water</span>
 
             {% if unread_notifications_count_by_category.Water > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Water }}</span>
-          {% endif %}
-
+              <span class="badge bg-danger">{{ unread_notifications_count_by_category.Water }}</span>
+            {% endif %}
 
           </a>
-        </li>
+      </li>
 
         <li class="nav-item mx-2">
           <a class="nav-link text-white " href="{% url 'juices' %}">
@@ -181,10 +185,11 @@ canvas {
             <span class="nav-link-text ms-1">Juices</span>
 
             
-            {% if unread_notifications_count_by_category.Juices > 0 %}
+          {% if unread_notifications_count_by_category.Juices > 0 %}
             <span class="badge bg-danger">{{ unread_notifications_count_by_category.Juices }}</span>
           {% endif %}
 
+          <div id="notifications"></div>
           </a>
         </li>
 
@@ -638,6 +643,43 @@ const pieChart = new Chart(document.getElementById('pieChart'), {
     });
 
 
+
+
+ // Enable logging during development
+ Pusher.logToConsole = true;
+
+const pusher = new Pusher('644784d465f437c7a662', {
+    cluster: 'ap2'
+});
+
+// List of drink categories to subscribe to
+const categories = ["Soda", "Water", "Juices", "Energydrinks"];
+
+categories.forEach(category => {
+    const channel = pusher.subscribe(`order-channel-${category}`);
+
+    channel.bind('new-order-event', function (data) {
+        console.log("New Order Event Received: ", data.message);
+
+        // Show notification in some box if needed
+        const box = document.getElementById("notifications");
+        if (box) {
+            const para = document.createElement("p");
+            para.innerText = data.message;
+            box.appendChild(para);
+        }
+
+        // Update the corresponding badge
+        const badgeId = `${category.toLowerCase()}-badge`; // e.g., soda-badge
+        const badge = document.getElementById(badgeId);
+        if (badge) {
+            let count = parseInt(badge.innerText);
+            count = isNaN(count) ? 0 : count + 1;
+            badge.innerText = count;
+            badge.style.display = 'inline-block';
+        }
+    });
+});
 
   </script>
 

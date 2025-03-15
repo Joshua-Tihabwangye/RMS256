@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from django.core.mail import send_mail
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -143,3 +145,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 SITE_URL = "http://localhost:8000/reset-password/{uid}/{token}/"
 
+load_dotenv()
+
+PUSHER_CONFIG = {
+    "app_id": os.getenv("PUSHER_APP_ID", "1953073"),
+    "key": os.getenv("PUSHER_KEY", "644784d465f437c7a662"),
+    "secret": os.getenv("PUSHER_SECRET", "c9a7ca3a3ff11d83cbcd"),
+    "cluster": os.getenv("PUSHER_CLUSTER", "ap2"),
+    "ssl": True
+}

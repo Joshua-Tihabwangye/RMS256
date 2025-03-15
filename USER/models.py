@@ -109,7 +109,8 @@ class Soda(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
-    timestamps = models.DateTimeField(auto_now_add=True) 
+    timestamps = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)  # Add this
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -119,6 +120,7 @@ class Water(models.Model):
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
     timestamps = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)  # Add this
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -127,7 +129,8 @@ class Energydrink(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
-    timestamps = models.DateTimeField(auto_now_add=True) 
+    timestamps = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)  # Add this
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -137,6 +140,7 @@ class Juices(models.Model):
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
     timestamps = models.DateTimeField(auto_now_add=True) 
+    is_read = models.BooleanField(default=False)  # Add this
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -404,33 +408,9 @@ class edit_fast_foodsItemForm(forms.ModelForm):
 
 class Notification(models.Model):
     message = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    category = models.CharField(max_length=50)  # e.g., 'Water', 'Soda', 'Energy Drinks'
     is_read = models.BooleanField(default=False)
-    category = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.message
-
-
-
-class Notification(models.Model):
-    CATEGORY_CHOICES = [
-        ('Breakfast', 'Breakfast'),
-        ('Lunch', 'Lunch'),
-        ('Supper', 'Supper'),
-        ('Water', 'Water'),
-        ('Soda', 'Soda'),
-        ('Juices', 'Juices'),
-        ('Energy Drinks', 'Energy Drinks'),
-        ('Beers', 'Beers'),
-        ('Wines', 'Wines'),
-        ('Whiskeys', 'Whiskeys'),
-    ]
-
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-    message = models.TextField()
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.category} - {self.message}"

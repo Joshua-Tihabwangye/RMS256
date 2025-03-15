@@ -36,10 +36,24 @@ from django.conf import settings
 
 
 
+import pusher
+from django.http import JsonResponse
+from django.conf import settings
+from .pusher_instance import pusher_client
+import logging
 
-from django.http import StreamingHttpResponse
-import json
-import time
+from USER import models
+
+
+
+# Initialize Pusher
+pusher_client = pusher.Pusher(
+    app_id=settings.PUSHER_CONFIG["app_id"],
+    key=settings.PUSHER_CONFIG["key"],
+    secret=settings.PUSHER_CONFIG["secret"],
+    cluster=settings.PUSHER_CONFIG["cluster"],
+    ssl=settings.PUSHER_CONFIG["ssl"],
+)
 
 
 # Create your views here.
@@ -71,11 +85,7 @@ def food(request):
                     table_number=int(table_number),
                     food_type=food_type,
                     number_of_people=int(number_of_people)
-                )
-                Notification.objects.create(
-                    message=f'New order for Breakfast: {number_of_people} people at table {table_number}',
-                    category='Breakfast'
-                )
+            )
                 order_placed = True
             else:
                 errors_present = True
@@ -176,23 +186,28 @@ def softdrinks(request):
         table_number = request.POST.get('table_number')
         order_placed = False
         errors_present = False  # Track if any error message was added
-
+       
         # Handling water
         if request.POST.get('food_item_check_1'):
             food_type = request.POST.get('food_item_type_1')
             number_of_people = request.POST.get('number_of_people_1', 0)
-            
+            category = "Water"
 
             if table_number and number_of_people and number_of_people.isdigit():
                 Water.objects.create(
                     table_number= int(table_number),
                     food_type=food_type,
                     number_of_people=int(number_of_people)
+
                 )
-                Notification.objects.create(
-                    message=f'New order for {Water}: {number_of_people} people at table {table_number}',
-                    category=Water,
-                    is_read=False)
+
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                # Trigger Pusher event
+                pusher_client.trigger(f'order-channel-Water', 'new-order-event', {
+                 'message': message
+                })
                 order_placed = True
             else:
                 errors_present = True
@@ -202,6 +217,7 @@ def softdrinks(request):
         if request.POST.get('food_item_check_2'):
             food_type = request.POST.get('food_item_type_2')
             number_of_people = request.POST.get('number_of_people_2', 0)
+            category = "Soda"
 
             if table_number and number_of_people and number_of_people.isdigit():
                 Soda.objects.create(
@@ -209,20 +225,25 @@ def softdrinks(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
-                Notification.objects.create(
-                    message=f'New order for {Soda}: {number_of_people} people at table {table_number}',
-                    category=Soda,
-                    is_read=False)
                 
+                # # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                # Trigger Pusher event
+                pusher_client.trigger(f'order-channel-Soda', 'new-order-event', {
+                 'message': message
+                })
+
                 order_placed = True
             else:
                 errors_present = True
-                messages.error(request, 'Invalid details for Soda. Please fill in all fields correctly.')
+                
 
         # Handling juices
         if request.POST.get('food_item_check_3'):
             food_type = request.POST.get('food_item_type_3')
             number_of_people = request.POST.get('number_of_people_3', 0)
+            category = "Juices"
 
             if table_number and number_of_people and number_of_people.isdigit():
                 Juices.objects.create(
@@ -230,10 +251,19 @@ def softdrinks(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
-                Notification.objects.create(
-                    message=f'New order for {Juices}: {number_of_people} people at table {table_number}',
-                    category=Juices,
-                    is_read=False)
+                
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-Juices', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present = True
@@ -244,16 +274,22 @@ def softdrinks(request):
             food_type = request.POST.get('food_item_type_4')
             number_of_people = request.POST.get('number_of_people_4', 0)
 
+            category = "Energydrinks"
+
             if table_number and number_of_people and number_of_people.isdigit():
                 Energydrink.objects.create(
                     table_number= int(table_number),
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
-                Notification.objects.create(
-                    message=f'New order for {Energydrink}: {number_of_people} people at table {table_number}',
-                    category=Energydrink,
-                    is_read=False)
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+               # Trigger Pusher event
+                pusher_client.trigger(f'order-channel-Energydrinks', 'new-order-event', {
+                 'message': message
+                })
+
                 order_placed = True
             else:
                 errors_present = True
@@ -666,66 +702,15 @@ def dashboard(request):
     start_of_week = today - timedelta(days=today.weekday())
     start_of_month = today.replace(day=1)
 
-    # Aggregate data for all order models
-    daily_orders = (
-        Breakfast.objects.filter(timestamps__date=today).count() +
-        Lunch.objects.filter(timestamps__date=today).count() +
-        Supper.objects.filter(timestamps__date=today).count() +
-        Water.objects.filter(timestamps__date=today).count() +
-        Soda.objects.filter(timestamps__date=today).count() +
-        Energydrink.objects.filter(timestamps__date=today).count() +
-        Juices.objects.filter(timestamps__date=today).count() +
-        Beers.objects.filter(timestamps__date=today).count() +
-        Wines.objects.filter(timestamps__date=today).count() +
-        Whiskeys.objects.filter(timestamps__date=today).count()+
-        Burgers.objects.filter(timestamps__date=today).count()+
-        Taccos.objects.filter(timestamps__date=today).count()+
-        Pizza.objects.filter(timestamps__date=today).count()+
-        Sand_Wich.objects.filter(timestamps__date=today).count()+
-        Chips.objects.filter(timestamps__date=today).count()
-    )
+    models = [Breakfast, Lunch, Supper, Soda, Water, Juices, Energydrink, Beers, Wines, Whiskeys, Burgers, Taccos, Pizza, Sand_Wich, Chips]
+    
+    # Daily, weekly, monthly orders
+    daily_orders = sum(model.objects.filter(timestamps__date=today).count() for model in models)
+    weekly_orders = sum(model.objects.filter(timestamps__date__gte=start_of_week).count() for model in models)
+    monthly_orders = sum(model.objects.filter(timestamps__date__gte=start_of_month).count() for model in models)
 
-    weekly_orders = (
-        Breakfast.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Lunch.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Supper.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Water.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Soda.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Energydrink.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Juices.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Beers.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Wines.objects.filter(timestamps__date__gte=start_of_week).count() +
-        Whiskeys.objects.filter(timestamps__date__gte=start_of_week).count()+
-        Burgers.objects.filter(timestamps__date__gte=start_of_week).count()+
-        Taccos.objects.filter(timestamps__date__gte=start_of_week).count()+
-        Pizza.objects.filter(timestamps__date__gte=start_of_week).count()+
-        Sand_Wich.objects.filter(timestamps__date__gte=start_of_week).count()+
-        Chips.objects.filter(timestamps__date__gte=start_of_week).count()
-    )
-
-    monthly_orders = (
-        Breakfast.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Lunch.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Supper.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Water.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Soda.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Energydrink.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Juices.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Beers.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Wines.objects.filter(timestamps__date__gte=start_of_month).count() +
-        Whiskeys.objects.filter(timestamps__date__gte=start_of_month).count()+
-        Burgers.objects.filter(timestamps__date__gte=start_of_month).count()+
-        Taccos.objects.filter(timestamps__date__gte=start_of_month).count()+
-        Pizza.objects.filter(timestamps__date__gte=start_of_month).count()+
-        Sand_Wich.objects.filter(timestamps__date__gte=start_of_month).count()+
-        Chips.objects.filter(timestamps__date__gte=start_of_month).count()
-    )
-
-    # Calculate the most placed order across all categories
+    # Most placed order logic
     order_data = []
-
-    models = [Breakfast, Lunch, Supper, Water, Soda, Energydrink, Juices, Beers, Wines, Whiskeys, Burgers, Taccos, Pizza, Sand_Wich, Chips]
-
     for model in models:
         orders = (
             model.objects.filter(timestamps__date__gte=start_of_month)
@@ -734,30 +719,39 @@ def dashboard(request):
         )
         order_data.extend(orders)
 
-    # Combine and find the most placed order
     if order_data:
         combined_orders = {}
         for item in order_data:
             food_type = item['food_type']
             count = item['order_count']
-            if food_type in combined_orders:
-                combined_orders[food_type] += count
-            else:
-                combined_orders[food_type] = count
-
+            combined_orders[food_type] = combined_orders.get(food_type, 0) + count
         most_placed_order = max(combined_orders, key=combined_orders.get)
         most_placed_order_count = combined_orders[most_placed_order]
         most_placed_order = f"{most_placed_order} ({most_placed_order_count} orders)"
     else:
         most_placed_order = "No orders this month"
 
+    # Unread notifications count by category
+    unread_notifications_count_by_category = {
+        'Soda': Soda.objects.filter(is_read=False).count(),
+        'Water': Water.objects.filter(is_read=False).count(),
+        'Juices': Juices.objects.filter(is_read=False).count(),
+        'Energydrinks': Energydrink.objects.filter(is_read=False).count(),
+        # Add other categories if needed (e.g., Beers, Wines, etc.)
+    }
+
+    # Combine all context data
     context = {
         'daily_orders': daily_orders,
         'weekly_orders': weekly_orders,
         'monthly_orders': monthly_orders,
         'most_placed_order': most_placed_order,
+        'unread_notifications_count_by_category': unread_notifications_count_by_category,
     }
+    
     return render(request, 'Admin/dashboard.html', context)
+
+
 
 def chart_data(request):
     today = now().date()
@@ -975,4 +969,5 @@ def sand_wich(request):
 
 def signout(request):
     return render(request, "Admin/signout.html")
+
 

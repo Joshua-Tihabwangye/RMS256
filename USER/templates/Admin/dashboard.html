@@ -102,8 +102,8 @@ canvas {
             </div>
             <span class="nav-link-text ms-1">Breakfast</span>
 
-            {% if unread_notifications_count_by_category.Breakfast > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Breakfast }}</span>
+          {% if unread_notifications_count_by_category.Breakfast > 0 %}
+            <span class="badge bg-danger" id="breakfast-badge">{{ unread_notifications_count_by_category.Breakfast }}</span>
           {% endif %}
           <div id="notifications"></div>
 
@@ -118,7 +118,7 @@ canvas {
             </div>
             <span class="nav-link-text ms-1">Lunch</span>
             {% if notifications_count_by_category.Lunch > 0 %}
-              <span class="badge bg-danger">{{ notifications_count_by_category.Lunch }}</span>
+              <span class="badge bg-danger" id="lunch-badge">{{ notifications_count_by_category.Lunch }}</span>
             {% endif %}
           </a>
         </li>
@@ -132,7 +132,7 @@ canvas {
             <span class="nav-link-text ms-1">Supper</span>
 
             {% if unread_notifications_count_by_category.Supper > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Supper }}</span>
+            <span class="badge bg-danger" id="supper-badge">{{ unread_notifications_count_by_category.Supper }}</span>
             {% endif %}
           </a>
         </li>
@@ -145,7 +145,7 @@ canvas {
               <span class="nav-link-text ms-1">Soda</span>
 
             {% if unread_notifications_count_by_category.Soda > 0 %}
-              <span class="badge bg-danger">{{ unread_notifications_count_by_category.Soda }}</span>
+              <span class="badge bg-danger" id="soda-badge">{{ unread_notifications_count_by_category.Soda }}</span>
             {% endif %}
           </a>
       </li>
@@ -158,7 +158,7 @@ canvas {
               <span class="nav-link-text ms-1">Energy Drinks</span>
               
             {% if unread_notifications_count_by_category.Energydrinks > 0 %}
-              <span class="badge bg-danger">{{ unread_notifications_count_by_category.Energydrinks }}</span>
+              <span class="badge bg-danger" id="energydrinks-badge">{{ unread_notifications_count_by_category.Energydrinks }}</span>
             {% endif %}
           </a>
       </li>
@@ -171,7 +171,7 @@ canvas {
               <span class="nav-link-text ms-1">Water</span>
 
             {% if unread_notifications_count_by_category.Water > 0 %}
-              <span class="badge bg-danger">{{ unread_notifications_count_by_category.Water }}</span>
+              <span class="badge bg-danger" id="water-badge">{{ unread_notifications_count_by_category.Water }}</span>
             {% endif %}
 
           </a>
@@ -186,7 +186,7 @@ canvas {
 
             
           {% if unread_notifications_count_by_category.Juices > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count_by_category.Juices }}</span>
+            <span class="badge bg-danger" id="juices-badge">{{ unread_notifications_count_by_category.Juices }}</span>
           {% endif %}
 
           <div id="notifications"></div>
@@ -201,8 +201,8 @@ canvas {
             </div>
             <span class="nav-link-text ms-1">Beers</span>
 
-            {% if unread_notifications_count > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+          {% if unread_notifications_count_by_category.Beers > 0 %}
+            <span class="badge bg-danger" id="beers-badge">{{ unread_notifications_count_by_category.Beers }}</span>
           {% endif %}
 
 
@@ -216,11 +216,11 @@ canvas {
             </div>
             <span class="nav-link-text ms-1">Wines</span>
 
-            {% if unread_notifications_count > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+          {% if unread_notifications_count_by_category.Wines > 0 %}
+            <span class="badge bg-danger" id="wines-badge">{{ unread_notifications_count_by_category.Wines }}</span>
           {% endif %}
           
-          
+
         </a>
       </li>
       
@@ -231,8 +231,8 @@ canvas {
             </div>
             <span class="nav-link-text ms-1">Whiskeys</span>
 
-            {% if unread_notifications_count > 0 %}
-            <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+          {% if unread_notifications_count_by_category.Whiskeys > 0 %}
+            <span class="badge bg-danger" id="whiskeys_badge">{{ unread_notifications_count_by_category.Whiskeys }}</span>
           {% endif %}
           </a>
       </li>
@@ -246,8 +246,8 @@ canvas {
           </div>
           <span class="nav-link-text ms-1">Burgers</span>
 
-          {% if unread_notifications_count > 0 %}
-          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% if unread_notifications_count_by_category.Burgers > 0 %}
+          <span class="badge bg-danger" id="burgers-badge">{{ unread_notifications_count_by_category.Burgers }}</span>
         {% endif %}
         
         </a>
@@ -261,8 +261,8 @@ canvas {
           </div>
           <span class="nav-link-text ms-1">Taccos</span>
 
-          {% if unread_notifications_count > 0 %}
-          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% if unread_notifications_count_by_category.Taccos > 0 %}
+          <span class="badge bg-danger" id="taccos-badge">{{ unread_notifications_count_by_category.Taccos }}</span>
         {% endif %}
         </a>
       </li>
@@ -275,8 +275,8 @@ canvas {
           </div>
           <span class="nav-link-text ms-1">Pizza</span>
 
-          {% if unread_notifications_count > 0 %}
-          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% if unread_notifications_count_by_category.Pizza > 0 %}
+          <span class="badge bg-danger" id="pizza-badge">{{ unread_notifications_count_by_category.Pizza }}</span>
         {% endif %}
         
         </a> 
@@ -289,8 +289,8 @@ canvas {
           </div>
           <span class="nav-link-text ms-1">Sand Wich</span>
 
-          {% if unread_notifications_count > 0 %}
-          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% if unread_notifications_count_by_category.Sand_Wich > 0 %}
+          <span class="badge bg-danger" id="Sand_Wich-badge">{{ unread_notifications_count_by_category.Sand_Wich }}</span>
         {% endif %}
         
         </a>
@@ -304,8 +304,8 @@ canvas {
           </div>
           <span class="nav-link-text ms-1">Chips</span>
 
-          {% if unread_notifications_count > 0 %}
-          <span class="badge bg-danger">{{ unread_notifications_count }}</span>
+        {% if unread_notifications_count_by_category.Chips > 0 %}
+          <span class="badge bg-danger">{{ unread_notifications_count_by_category.Chips }}</span>
         {% endif %}
         
         </a>
@@ -625,38 +625,42 @@ const pieChart = new Chart(document.getElementById('pieChart'), {
 
 
 
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-            const badge = this.querySelector('.badge');
-            if (badge) {
-                badge.remove(); // Remove the badge element
-            }
-        });
-    });
-
-
-
-
- // Enable logging during development
- Pusher.logToConsole = true;
+// Enable logging during development
+Pusher.logToConsole = true;
 
 const pusher = new Pusher('644784d465f437c7a662', {
     cluster: 'ap2'
 });
 
-// List of drink categories to subscribe to
-const categories = ["Soda", "Water", "Juices", "Energydrinks"];
+// Map of categories to their URL paths (must match your Django URLs)
+const categoryUrlMap = {
+    "Soda": "/soda",
+    "Water": "/water",
+    "Juices": "/juices",
+    "Energydrinks": "/energydrink",
+
+    "Breakfast": "/breakfast",
+    "Lunch": "/luch",
+    "Supper": "/supper",
+
+    "Wines": "/wines",
+    "Beers": "/beers",
+    "Whiskeys": "/whiskeys",
+
+    "Chips": "/chips",
+    "Burgers": "/burgers",
+    "Taccos": "/taccos",
+    "Sand_Wich": "/sand_wich",
+    "Pizza": "/pizza"
+};
+
+// List of food categories to subscribe to
+const categories = ["Soda", "Water", "Juices", "Energydrinks", "Wines", "Beers", "Whiskeys", "Chips", "Taccos", "Burgers", "Pizza", "Sand_Wich", "Breakfast", "Luch", "Supper" ];
 
 categories.forEach(category => {
     const channel = pusher.subscribe(`order-channel-${category}`);
+    const badgeId = `${category.toLowerCase()}-badge`; // e.g., soda-badge
+    const urlPath = categoryUrlMap[category]; // Get the URL path for this category
 
     channel.bind('new-order-event', function (data) {
         console.log("New Order Event Received: ", data.message);
@@ -669,14 +673,35 @@ categories.forEach(category => {
             box.appendChild(para);
         }
 
-        // Update the corresponding badge
-        const badgeId = `${category.toLowerCase()}-badge`; // e.g., soda-badge
+
+      // Update the corresponding badge
         const badge = document.getElementById(badgeId);
         if (badge) {
-            let count = parseInt(badge.innerText);
-            count = isNaN(count) ? 0 : count + 1;
-            badge.innerText = count;
-            badge.style.display = 'inline-block';
+            let count = parseInt(badge.innerText) || 0;
+            badge.innerText = count + 1;
+            badge.style.display = 'inline-block'; // Ensure badge is visible
+        } else {
+            // If badge doesn't exist, create it dynamically
+            const link = document.querySelector(`a[href="${urlPath}"]`);
+            if (link) {
+                const newBadge = document.createElement("span");
+                newBadge.id = badgeId;
+                newBadge.className = "badge bg-danger";
+                newBadge.innerText = "1";
+                newBadge.style.display = "inline-block";
+                link.appendChild(newBadge);
+            }
+        }
+    });
+});
+
+// Reset badge when the link is clicked
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function () {
+        const badge = this.querySelector('.badge');
+        if (badge) {
+            badge.innerText = "0"; // Reset count
+            badge.style.display = 'none'; // Hide badge
         }
     });
 });

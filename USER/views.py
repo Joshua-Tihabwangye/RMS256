@@ -86,6 +86,18 @@ def food(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
             )
+                # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Breakfast', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present = True
@@ -102,10 +114,19 @@ def food(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
-                Notification.objects.create(
-                    message=f'New order for Lunch: {number_of_people} people at table {table_number}',
-                    category='Lunch'
-                )
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Lunch', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
+
                 order_placed = True
             else:
                 errors_present = True
@@ -122,10 +143,19 @@ def food(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
-                Notification.objects.create(
-                    message=f'New order for Supper: {number_of_people} people at table {table_number}',
-                    category='Supper'
-                )
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Supper', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
+
                 order_placed = True
             else:
                 errors_present = True
@@ -204,10 +234,16 @@ def softdrinks(request):
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
 
-                # Trigger Pusher event
-                pusher_client.trigger(f'order-channel-Water', 'new-order-event', {
-                 'message': message
-                })
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Water', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
+                
                 order_placed = True
             else:
                 errors_present = True
@@ -226,13 +262,18 @@ def softdrinks(request):
                     number_of_people=int(number_of_people)
                 )
                 
-                # # Send notification to the admin
+                 # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
 
-                # Trigger Pusher event
-                pusher_client.trigger(f'order-channel-Soda', 'new-order-event', {
-                 'message': message
-                })
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Soda', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
 
                 order_placed = True
             else:
@@ -257,7 +298,7 @@ def softdrinks(request):
 
                 try:
                     # Trigger Pusher event
-                    pusher_client.trigger(f'order-Juices', 'new-order-event', {
+                    pusher_client.trigger(f'order-channel-Juices', 'new-order-event', {
                     'message': message
                     })
                 except Exception as e:
@@ -285,10 +326,14 @@ def softdrinks(request):
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
 
-               # Trigger Pusher event
-                pusher_client.trigger(f'order-channel-Energydrinks', 'new-order-event', {
-                 'message': message
-                })
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Energydrink', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
 
                 order_placed = True
             else:
@@ -359,6 +404,20 @@ def alcohol(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
+
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Beers', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
+
                 order_placed = True
             else:
                 errors_present = True
@@ -375,6 +434,19 @@ def alcohol(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
+
+                # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Wines', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present = True
@@ -391,6 +463,20 @@ def alcohol(request):
                     food_type=food_type,
                     number_of_people=int(number_of_people)
                 )
+
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Whiskeys', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
+
                 order_placed = True
             else:
                 errors_present = True
@@ -462,6 +548,19 @@ def fast_foods(request):
                     table_number = int(table_number),
                     number_of_people = int(number_of_people),
                 )
+
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Burgers', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present = True
@@ -479,6 +578,19 @@ def fast_foods(request):
                     table_number = int(table_number),
                     number_of_people = int(number_of_people),
                 )
+
+                # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Taccos', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present = True
@@ -496,6 +608,19 @@ def fast_foods(request):
                     table_number = int(table_number),
                     number_of_people = int(number_of_people),
                 )
+
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Pizza', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present = True
@@ -513,6 +638,19 @@ def fast_foods(request):
                     table_number = int(table_number),
                     number_of_people = int(number_of_people),
                 )
+
+                # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Sand_Wich', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present = True
@@ -530,6 +668,19 @@ def fast_foods(request):
                     table_number = int(table_number),
                     number_of_people = int(number_of_people)
                 )
+
+                 # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                try:
+                    # Trigger Pusher event
+                    pusher_client.trigger(f'order-channel-Chips', 'new-order-event', {
+                    'message': message
+                    })
+                except Exception as e:
+                    logging.error(f"Pusher error: {e}")
+                # You can also show a fallback message or continue silently
+
                 order_placed = True
             else:
                 errors_present =True
@@ -737,6 +888,21 @@ def dashboard(request):
         'Water': Water.objects.filter(is_read=False).count(),
         'Juices': Juices.objects.filter(is_read=False).count(),
         'Energydrinks': Energydrink.objects.filter(is_read=False).count(),
+
+        'Wines': Wines.objects.filter(is_read=False).count(),
+        'Beers': Beers.objects.filter(is_read=False).count(),
+        'Whiskeys': Whiskeys.objects.filter(is_read=False).count(),
+
+        'Breakfast': Breakfast.objects.filter(is_read=False).count(),
+        'Lunch': Lunch.objects.filter(is_read=False).count(),
+        'Supper': Supper.objects.filter(is_read=False).count(),
+
+        'Burgers': Burgers.objects.filter(is_read=False).count(),
+        'Taccos': Taccos.objects.filter(is_read=False).count(),
+        'Pizza': Pizza.objects.filter(is_read=False).count(),
+        'Sand_Wich': Sand_Wich.objects.filter(is_read=False).count(),
+        'Chips': Chips.objects.filter(is_read=False).count(),
+
         # Add other categories if needed (e.g., Beers, Wines, etc.)
     }
 
@@ -800,170 +966,100 @@ def chart_data(request):
 
 
 def breakfast(request):
-   
-    # Fetch lunch items
+    Breakfast.objects.filter(is_read=False).update(is_read=True)
     breakfast_items = Breakfast.objects.all()
-
-    
-    return render(request, 'Admin/breakfast.html', {
-        'breakfast_items': breakfast_items,
-        })
-
-
+    context = {'breakfast_items': breakfast_items}
+    return render(request, 'Admin/breakfast.html', context)
 
 def lunch(request):
-    # Mark only Lunch notifications as read
-    Notification.objects.filter(is_read=False, category="Lunch").update(is_read=True)
-
-    # Fetch lunch items
-    lunch_items = Lunch.objects.all()
-
-    # Count unread Lunch notifications
-    unread_notifications_count = Notification.objects.filter(is_read=False, category="Lunch").count()
-
-    return render(request, 'Admin/lunch.html', {
-        'lunch_items': lunch_items,
-        })
-
+    Lunch.objects.filter(is_read=False).update(is_read=True)
+    luch_items = Lunch.objects.all()
+    context = {'luch_items': luch_items}
+    return render(request, 'Admin/luch.html', context)
 
 def supper(request):
-    
-    # Fetch lunch items
+    Supper.objects.filter(is_read=False).update(is_read=True)
     supper_items = Supper.objects.all()
+    context = {'supper_items': supper_items}
+    return render(request, 'Admin/supper.html', context)
 
-    
-    return render(request, 'Admin/supper.html', {
-        'supper_items': supper_items,
-        })
 
 
 
 def juices(request):
-    
-    # Fetch lunch items
+    Juices.objects.filter(is_read=False).update(is_read=True)
     juices_items = Juices.objects.all()
-
-    
-    return render(request, 'Admin/juices.html', {
-        'juices_items': juices_items,
-        })
-
+    context = {'juices_items': juices_items}
+    return render(request, 'Admin/juices.html', context)
 
 def soda(request):
-    
-    # Fetch lunch items
+    Soda.objects.filter(is_read=False).update(is_read=True)
     soda_items = Soda.objects.all()
-
-    
-    return render(request, 'Admin/soda.html', {
-        'soda_items': soda_items,
-        })
-
-
+    context = {'soda_items': soda_items}
+    return render(request, 'Admin/soda.html', context)
 
 def water(request):
-    
-    # Fetch lunch items
+    Water.objects.filter(is_read=False).update(is_read=True)
     water_items = Water.objects.all()
-
-    
-    return render(request, 'Admin/water.html', {
-        'water_items': water_items,
-        })
-
-
+    context = {'water_items': water_items}
+    return render(request, 'Admin/water.html', context)
 
 def energydrink(request):
-    
-    # Fetch lunch items
+    Energydrink.objects.filter(is_read=False).update(is_read=True)
     energydrink_items = Energydrink.objects.all()
-
-    
-    return render(request, 'Admin/energydrink.html', {
-        'energydrink_items': energydrink_items,
-        })
-
+    context = {'energydrink_items': energydrink_items}
+    return render(request, 'Admin/energydrink.html', context)
 
 
 
 def whiskeys(request):
-    
-    # Fetch lunch items
+    Whiskeys.objects.filter(is_read=False).update(is_read=True)
     whiskeys_items = Whiskeys.objects.all()
-
-    
-    return render(request, 'Admin/whiskeys.html', {
-        'whiskeys_items': whiskeys_items,
-        })
+    context = {'whiskeys_items': whiskeys_items}
+    return render(request, 'Admin/whiskeys.html', context)
 
 def beers(request):
-    
-    # Fetch soda items and any other necessary data
-    beers_items = Beers.objects.all() 
-
-    
-    return render(request, 'Admin/beers.html', {
-        'beers_items': beers_items,
-        })
+    Beers.objects.filter(is_read=False).update(is_read=True)
+    beers_items = Beers.objects.all()
+    context = {'beers_items': beers_items}
+    return render(request, 'Admin/beers.html', context)
 
 def wines(request):
-    
-    # Fetch soda items and any other necessary data
-    wines_items = Wines.objects.all() 
-
-    
-    return render(request, 'Admin/wines.html', {
-        'wines_items': wines_items,
-        })
-
+    Wines.objects.filter(is_read=False).update(is_read=True)
+    wines_items = Wines.objects.all()
+    context = {'wines_items': wines_items}
+    return render(request, 'Admin/wines.html', context)
 
 
 def chips(request):
-
-    # Fetch lunch items
+    Chips.objects.filter(is_read=False).update(is_read=True)
     chips_items = Chips.objects.all()
-
-   
-    return render(request, 'Admin/chips.html', {
-        'chips_items': chips_items,
-       })
+    context = {'chips_items': chips_items}
+    return render(request, 'Admin/chips.html', context)
 
 def taccos(request):
-   
-    # Fetch lunch items
+    Taccos.objects.filter(is_read=False).update(is_read=True)
     taccos_items = Taccos.objects.all()
-
-    
-    return render(request, 'Admin/taccos.html', {
-        'taccos_items': taccos_items,
-       })
+    context = {'taccos_items': taccos_items}
+    return render(request, 'Admin/taccos.html', context)
 
 def burgers(request):
-   
-    # Fetch lunch items
+    Burgers.objects.filter(is_read=False).update(is_read=True)
     burgers_items = Burgers.objects.all()
-
-    return render(request, 'Admin/burgers.html', {
-        'burgers_items': burgers_items,
-        })
+    context = {'burgers_items': burgers_items}
+    return render(request, 'Admin/burgers.html', context)
 
 def pizza(request):
-   
-    # Fetch lunch items
+    Pizza.objects.filter(is_read=False).update(is_read=True)
     pizza_items = Pizza.objects.all()
-
-    return render(request, 'Admin/pizza.html', {
-        'pizza_items': pizza_items,
-        })
+    context = {'pizza_items': pizza_items}
+    return render(request, 'Admin/pizza.html', context)
 
 def sand_wich(request):
-
-       # Fetch lunch items
+    Sand_Wich.objects.filter(is_read=False).update(is_read=True)
     sand_wich_items = Sand_Wich.objects.all()
-
-    return render(request, 'Admin/sand_wich.html', {
-        'sand_wich_items': sand_wich_items,
-        })
+    context = {'sand_wich_items': sand_wich_items}
+    return render(request, 'Admin/sand_wich.html', context)
 
 
 

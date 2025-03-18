@@ -43,9 +43,8 @@
 .buttons-container .Edit-food,
 .buttons-container .Edit-drinks,
 .buttons-container .Edit-alcohol,
-.buttons-container .Edit-fries,
-.buttons-container .Edit-burgers,
-.buttons-container .Edit-pizza {
+.buttons-container .Edit-fast_foods,
+.buttons-container .Edit-alcohol {
   font-size: 1.2rem;
   border-radius: 20%;
 }
@@ -66,7 +65,20 @@ canvas {
         font-family: sans-serif;
     }
 
+    .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transition: all 0.4s ease;
+}
 
+.nav-link:hover .material-icons {
+    transform: scale(1.4);
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover .nav-link-text {
+    font-weight: bold;
+}
 
 </style>
 

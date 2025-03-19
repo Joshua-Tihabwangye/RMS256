@@ -13,6 +13,7 @@
   <script src="{% static 'USER/js/script.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 
   <title>
@@ -75,11 +76,17 @@ canvas {
     transform: scale(1.4);
     transition: transform 0.3s ease;
 }
+.nav-link:hover .material-symbols-outlined{
+  transform: scale(1.4);
+    transition: transform 0.3s ease;
+}
 
 .nav-link:hover .nav-link-text {
     font-weight: bold;
 }
-
+.material-symbols-outlined {
+    text-transform: none;
+}
 </style>
 
 </head>
@@ -126,7 +133,7 @@ canvas {
         <li class="nav-item mx-1">
           <a class="nav-link text-white " href="{% url 'lunch' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">lunch_dining</i>
+              <span class="material-symbols-outlined">local_dining</span>
             </div>
             <span class="nav-link-text ms-1">Lunch</span>
             {% if notifications_count_by_category.Lunch > 0 %}
@@ -188,149 +195,109 @@ canvas {
 
           </a>
       </li>
-
-        <li class="nav-item mx-2">
-          <a class="nav-link text-white " href="{% url 'juices' %}">
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'beers' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">blender</i>
-            </div>
-            <span class="nav-link-text ms-1">Juices</span>
-
-            
-          {% if unread_notifications_count_by_category.Juices > 0 %}
-            <span class="badge bg-danger" id="juices-badge">{{ unread_notifications_count_by_category.Juices }}</span>
-          {% endif %}
-
-          <div id="notifications"></div>
-          </a>
-        </li>
-
-        
-        <li class="nav-item mx-2">
-          <a class="nav-link text-white " href="{% url 'beers' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">login</i>
+                <span class="material-symbols-outlined">sports_bar</span>
             </div>
             <span class="nav-link-text ms-1">Beers</span>
-
-          {% if unread_notifications_count_by_category.Beers > 0 %}
-            <span class="badge bg-danger" id="beers-badge">{{ unread_notifications_count_by_category.Beers }}</span>
-          {% endif %}
-
-
-          </a>
-        </li>
-
-        <li class="nav-item mx-2">
-          <a class="nav-link text-white " href="{% url 'wines' %}">
+            {% if unread_notifications_count_by_category.Beers > 0 %}
+                <span class="badge bg-danger" id="beers-badge">{{ unread_notifications_count_by_category.Beers }}</span>
+            {% endif %}
+        </a>
+    </li>
+    
+    <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'wines' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">login</i>
+                <span class="material-symbols-outlined">wine_bar</span>
             </div>
             <span class="nav-link-text ms-1">Wines</span>
-
-          {% if unread_notifications_count_by_category.Wines > 0 %}
-            <span class="badge bg-danger" id="wines-badge">{{ unread_notifications_count_by_category.Wines }}</span>
-          {% endif %}
-          
-
+            {% if unread_notifications_count_by_category.Wines > 0 %}
+                <span class="badge bg-danger" id="wines-badge">{{ unread_notifications_count_by_category.Wines }}</span>
+            {% endif %}
         </a>
-      </li>
-      
-      <li class="nav-item mx-2">
-          <a class="nav-link text-white " href="{% url 'whiskeys' %}">
+    </li>
+    
+    <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'whiskeys' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">login</i>
+                <span class="material-symbols-outlined">local_bar</span>
             </div>
             <span class="nav-link-text ms-1">Whiskeys</span>
-
-          {% if unread_notifications_count_by_category.Whiskeys > 0 %}
-            <span class="badge bg-danger" id="whiskeys_badge">{{ unread_notifications_count_by_category.Whiskeys }}</span>
-          {% endif %}
-          </a>
-      </li>
- 
-
-
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white " href="{% url 'burgers' %}">
-          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="material-icons opacity-10">login</i>
-          </div>
-          <span class="nav-link-text ms-1">Burgers</span>
-
-        {% if unread_notifications_count_by_category.Burgers > 0 %}
-          <span class="badge bg-danger" id="burgers-badge">{{ unread_notifications_count_by_category.Burgers }}</span>
-        {% endif %}
-        
+            {% if unread_notifications_count_by_category.Whiskeys > 0 %}
+                <span class="badge bg-danger" id="whiskeys_badge">{{ unread_notifications_count_by_category.Whiskeys }}</span>
+            {% endif %}
         </a>
-      </li>
-
-
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white " href="{% url 'taccos' %}">
-          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="material-icons opacity-10">login</i>
-          </div>
-          <span class="nav-link-text ms-1">Taccos</span>
-
-        {% if unread_notifications_count_by_category.Taccos > 0 %}
-          <span class="badge bg-danger" id="taccos-badge">{{ unread_notifications_count_by_category.Taccos }}</span>
-        {% endif %}
+    </li>
+    
+    <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'burgers' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <span class="material-symbols-outlined">lunch_dining</span>
+            </div>
+            <span class="nav-link-text ms-1">Burgers</span>
+            {% if unread_notifications_count_by_category.Burgers > 0 %}
+                <span class="badge bg-danger" id="burgers-badge">{{ unread_notifications_count_by_category.Burgers }}</span>
+            {% endif %}
         </a>
-      </li>
-
-
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white " href="{% url 'pizza' %}">
-          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="material-icons opacity-10">login</i>
-          </div>
-          <span class="nav-link-text ms-1">Pizza</span>
-
-        {% if unread_notifications_count_by_category.Pizza > 0 %}
-          <span class="badge bg-danger" id="pizza-badge">{{ unread_notifications_count_by_category.Pizza }}</span>
-        {% endif %}
-        
-        </a> 
-      </li>
-
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white " href="{% url 'sand_wich' %}">
-          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="material-icons opacity-10">login</i>
-          </div>
-          <span class="nav-link-text ms-1">Sand Wich</span>
-
-        {% if unread_notifications_count_by_category.Sand_Wich > 0 %}
-          <span class="badge bg-danger" id="Sand_Wich-badge">{{ unread_notifications_count_by_category.Sand_Wich }}</span>
-        {% endif %}
-        
+    </li>
+    
+    <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'taccos' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <span class="material-symbols-outlined">tapas</span>
+            </div>
+            <span class="nav-link-text ms-1">Taccos</span>
+            {% if unread_notifications_count_by_category.Taccos > 0 %}
+                <span class="badge bg-danger" id="taccos-badge">{{ unread_notifications_count_by_category.Taccos }}</span>
+            {% endif %}
         </a>
-      </li>
-
-
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white " href="{% url 'chips' %}">
-          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="material-icons opacity-10">login</i>
-          </div>
-          <span class="nav-link-text ms-1">Chips</span>
-
-        {% if unread_notifications_count_by_category.Chips > 0 %}
-          <span class="badge bg-danger">{{ unread_notifications_count_by_category.Chips }}</span>
-        {% endif %}
-        
+    </li>
+    
+    <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'pizza' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <span class="material-symbols-outlined">local_pizza</span>
+            </div>
+            <span class="nav-link-text ms-1">Pizza</span>
+            {% if unread_notifications_count_by_category.Pizza > 0 %}
+                <span class="badge bg-danger" id="pizza-badge">{{ unread_notifications_count_by_category.Pizza }}</span>
+            {% endif %}
         </a>
-      </li>
-
+    </li>
+    
+    <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'sand_wich' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <span class="material-symbols-outlined">lunch_dining</span>
+            </div>
+            <span class="nav-link-text ms-1">Sand Wich</span>
+            {% if unread_notifications_count_by_category.Sand_Wich > 0 %}
+                <span class="badge bg-danger" id="Sand_Wich-badge">{{ unread_notifications_count_by_category.Sand_Wich }}</span>
+            {% endif %}
+        </a>
+    </li>
+    
+    <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="{% url 'chips' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <span class="material-symbols-outlined">fastfood</span>
+            </div>
+            <span class="nav-link-text ms-1">Chips</span>
+            {% if unread_notifications_count_by_category.Chips > 0 %}
+                <span class="badge bg-danger">{{ unread_notifications_count_by_category.Chips }}</span>
+            {% endif %}
+        </a>
+    </li>
 
 
         <li class="nav-item mx-4">
           <a class="nav-link text-white " href="#">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">assignment</i>
+              <span class="material-symbols-outlined">exit_to_app</span>
             </div>
-            <span class="nav-link-text ms-1">Log Out</span>
+            <span class="nav-link-text ms-1">log out</span>
           </a>
         </li>
 

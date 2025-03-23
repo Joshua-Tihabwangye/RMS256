@@ -921,31 +921,32 @@ def dashboard(request):
 
 def chart_data(request):
     today = now().date()
-    start_of_week = today - timedelta(days=today.weekday())  # Monday of the current week
-    end_of_week = start_of_week + timedelta(days=6)  # Sunday of the current week
     start_of_month = today.replace(day=1)  # First day of the current month
+    end_of_month = (start_of_month.replace(month=start_of_month.month + 1, day=1) - timedelta(days=1))  # Last day of the current month
 
     models = [Breakfast, Lunch, Supper, Water, Soda, Energydrink, Juices, Beers, Wines, Whiskeys, Burgers, Taccos, Pizza, Sand_Wich, Chips]
     daily_orders = defaultdict(int)
     category_totals = defaultdict(int)  # For pie chart
-    weekly_orders = defaultdict(int)
+    weekly_orders = [0, 0, 0, 0]  # Initialize weekly_orders as a list
 
+    all_month_orders = []
     for model in models:
-        # Filter orders for the current week only
-        orders = model.objects.filter(timestamps__date__gte=start_of_week, timestamps__date__lte=end_of_week)
-        for order in orders:
-            day = order.timestamps.date().weekday()  # Map orders to the correct day (0 = Monday, ..., 6 = Sunday)
-            daily_orders[day] += 1  # Accumulate daily orders for the current week
-            category_totals[model.__name__] += 1  # Count orders by category for pie chart
-            week = order.timestamps.isocalendar().week  # Map orders to the correct week number
-            weekly_orders[week] += 1
+        # Filter orders for the entire month
+        orders = model.objects.filter(timestamps__date__gte=start_of_month, timestamps__date__lte=end_of_month)
+        all_month_orders.extend(orders)
+
+    for order in all_month_orders:
+        day = order.timestamps.date().weekday()
+        daily_orders[day] += 1
+        category_totals[order._meta.model_name] += 1
+
+        # Calculate the week number within the month
+        week_number = (order.timestamps.date() - start_of_month).days // 7
+        if 0 <= week_number < 4:
+            weekly_orders[week_number] += 1
 
     # Convert to a list of daily totals (Monday to Sunday)
     daily_totals = [daily_orders.get(i, 0) for i in range(7)]
-
-     # Extract totals for weeks 1 to 4 of the month
-    weekly_totals = [weekly_orders.get(week, 0) for week in range(start_of_month.isocalendar().week, start_of_month.isocalendar().week + 4)]
-
 
     # Prepare pie chart data (total orders per category)
     pie_chart_data = [{'category': key, 'total': value} for key, value in category_totals.items()]
@@ -953,7 +954,7 @@ def chart_data(request):
     return JsonResponse({
         'daily_orders': daily_totals,
         'pie_chart_data': pie_chart_data,
-        'weekly_orders': weekly_totals,
+        'weekly_orders': weekly_orders,
     })
 
 

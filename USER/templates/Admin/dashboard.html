@@ -40,6 +40,7 @@
   justify-content: space-between;
   margin-top: 1rem;
   padding: 0 1rem;
+  flex-wrap: wrap; /* Allow buttons to wrap */
 }
 .buttons-container .Edit-food,
 .buttons-container .Edit-drinks,
@@ -51,10 +52,12 @@
 }
 .buttons-container button {
     border-radius: 10%; 
+    margin: 0.5rem; 
 }
 canvas {
     max-width: 500px;
     max-height: 500px;
+    width: 100%; /* Make canvas take up 100% of parent width */
 }
 
     .notification {
@@ -87,6 +90,37 @@ canvas {
 .material-symbols-outlined {
     text-transform: none;
 }
+
+
+ /* Optional CSS for customization */
+ .navbar-brand {
+            font-size: 1.5rem;
+        }
+        .navbar-nav .nav-link {
+            padding: 0.5rem 1rem;}
+
+.chart-container{
+            display: flex;
+            flex-wrap: wrap; /* Allow charts to wrap */
+            justify-content: space-between;
+        }
+
+        /* Responsive adjustments using media queries */
+        @media (max-width: 768px) { /* Tablet and below */
+            .buttons-container {
+                justify-content: center; /* Center buttons on smaller screens */
+            }
+            .chart-container{
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (max-width: 480px) { /* Phone */
+            .buttons-container button {
+                width: 100%; /* Make buttons full-width on phones */
+            }
+        }
+
 </style>
 
 </head>
@@ -546,7 +580,7 @@ initializeBarChart();
                   data: weeklyOrders,
                   backgroundColor: [
                       'rgba(255, 99, 132, 0.5)', // Red
-                      'rgba(54, 162, 235, 0.5)', // Blue
+                      'rgba(290, 200, 435, 0.5)', // Blue
                       'rgba(255, 206, 86, 0.5)', // Yellow
                       'rgba(75, 192, 192, 0.5)'  // Green
                   ],

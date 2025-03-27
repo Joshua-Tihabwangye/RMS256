@@ -167,7 +167,7 @@
                                            Beer 
                                     </label>
 
-                                    <select class="select form-select mt-2" name="food_item_type_1" id="beers-select">
+                                    <select class="select form-select mt-2  mx-5" name="food_item_type_1" id="beers-select">
                                         <option value="">Choose</optin>
                                         {% for item in beers_items %}
                                             <option value="{{ item.name }}">{{ item.name }} -- Ugx: {{ item.price }}</option>
@@ -187,7 +187,7 @@
                                     <label class="px-3 text-white form-check-label" for="check2">
                                         Wines
                                     </label>
-                                    <select class="select form-select mt-2" name="food_item_type_2" id="wines-select">
+                                    <select class="select form-select mt-2 mx-4" name="food_item_type_2" id="wines-select">
                                         <option value="">Choose</optin>
                                             {% for item in wines_items %}
                                             <option value="{{ item.name }}"> {{ item.name }} -- Ugx: {{ item.price }} </option>
@@ -204,7 +204,7 @@
                                     <label class="px-3 text-white form-check-label" for="check3">
                                         Whiskeys
                                     </label>
-                                    <select class="select form-select mt-2" name="food_item_type_3" id="whiskeys-select">
+                                    <select class="select form-select mt-2 mx-3" name="food_item_type_3" id="whiskeys-select">
                                         <option value="">Choose Type</option>
                                             {% for item in whiskeys_items %}
                                                 <option value="{{ item.name }}">{{ item.name }} -- Ugx: {{item.price}} </option>

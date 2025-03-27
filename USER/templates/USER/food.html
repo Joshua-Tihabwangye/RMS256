@@ -8,12 +8,6 @@
     <title>Food & Breakfast</title>
     <style>
 
-        .Head h2 {
-            font-size: 2rem;
-            color: #ffc107;
-            font-family: 'Prata', serif;
-        }
-
         .nav-links {
             display: flex;
             gap: 1.5rem;
@@ -24,10 +18,6 @@
         .nav-links a {
             color: white;
             text-decoration: none;
-        }
-
-        .nav-links a:hover {
-            color: #ffc107;
         }
 
 
@@ -106,7 +96,7 @@
         }
 
         .container-alert {
-            background-color: #ffd000; 
+            background-color: #9b648d; 
             color: #080808; 
             border-color: #ffffff; 
             border-radius: 5%;
@@ -149,7 +139,7 @@
                                     <input class="form-check-input" type="checkbox" name="food_item_check_1" id="check1">
                                     <label class="px-3 text-white form-check-label" for="check1">Breakfast</label>
 
-                                    <select class="select form-select mt-2" name="food_item_type_1" id="breakfast-select">
+                                    <select class="select form-select mt-4" name="food_item_type_1" id="breakfast-select">
                                         <option value="">Choose Type</option>
                                         {% for item in breakfast_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -170,7 +160,7 @@
                                         Lunch
                                     </label>
 
-                                    <select class="select form-select mt-2" name="food_item_type_2" id="lunch-select">
+                                    <select class="select form-select mt-4 mx-4" name="food_item_type_2" id="lunch-select">
                                         <option value="">Choose Type</option>
                                         {% for item in lunch_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -191,7 +181,7 @@
                                            Supper 
                                     </label>
 
-                                    <select class="select form-select mt-2" name="food_item_type_3" id="supper-select">
+                                    <select class="select form-select mt-4 mx-4" name="food_item_type_3" id="supper-select">
                                         <option value="">Choose Type</option>
                                         {% for item in supper_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -200,7 +190,7 @@
 
                                     <div class="Input">
                                         <label class="px-3 modal-label" for="check3-input">No of people</label>
-                                        <input type="text" class="mx-4 form-control" name="number_of_people_3" id="check3-input" placeholder="People" style="width: 80px;">
+                                        <input type="text" class="mx-3 form-control" name="number_of_people_3" id="check3-input" placeholder="People" style="width: 80px;">
                                     </div>
                                 </div>
                                

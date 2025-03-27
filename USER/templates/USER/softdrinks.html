@@ -164,7 +164,7 @@
                                     <input class="form-check-input" type="checkbox" name="food_item_check_1" id="check1">
                                     <label class="px-3 text-white form-check-label" for="check1">Water</label>
 
-                                    <select class="select form-select mt-2" name="food_item_type_1" id="water-select">
+                                    <select class="select form-select mt-2 mx-4" name="food_item_type_1" id="water-select">
                                         <option value="">Choose Type</option>
                                         {% for item in water_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -184,7 +184,7 @@
                                         Soda
                                     </label>
 
-                                    <select class="select form-select mt-2" name="food_item_type_2" id="soda-select">
+                                    <select class="select form-select mt-2 mx-4" name="food_item_type_2" id="soda-select">
                                         <option value="">Choose Type</option>
                                         {% for item in soda_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -203,7 +203,7 @@
                                         Juices
                                     </label>
                                     
-                                    <select class="select form-select mt-2" name="food_item_type_3" id="juice-select">
+                                    <select class="select form-select mt-2 mx-4" name="food_item_type_3" id="juice-select">
                                         <option value="">Choose Type</option>
                                         {% for item in juice_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>

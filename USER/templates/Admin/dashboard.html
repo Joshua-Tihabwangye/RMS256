@@ -129,15 +129,16 @@ canvas {
 
 <body class="g-sidenav-show  bg-gray-200">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100">
         <a class="navbar-brand" href="#">J.T Restaurant</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
 
-      
 
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav flex-grow-1"> <li class="nav-item mx-1">
 
         <li class="nav-item mx-1">
           <a class="nav-link text-white active bg-gradient-primary" href="{% url 'dashboard' %}">
@@ -203,9 +204,9 @@ canvas {
               <span class="badge bg-danger" id="soda-badge">{{ unread_notifications_count_by_category.Soda }}</span>
             {% endif %}
           </a>
-      </li>
+        </li>
       
-      <li class="nav-item mx-1">
+        <li class="nav-item mx-1">
           <a class="nav-link text-white" href="{% url 'energydrink' %}">
               <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="material-icons opacity-10">electric_bolt</i>
@@ -216,9 +217,9 @@ canvas {
               <span class="badge bg-danger" id="energydrinks-badge">{{ unread_notifications_count_by_category.Energydrinks }}</span>
             {% endif %}
           </a>
-      </li>
+        </li>
       
-      <li class="nav-item mx-2">
+        <li class="nav-item mx-1">
           <a class="nav-link text-white" href="{% url 'water' %}">
               <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="material-icons opacity-10">water_drop</i>
@@ -230,9 +231,10 @@ canvas {
             {% endif %}
 
           </a>
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'beers' %}">
+        </li>
+
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'beers' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <span class="material-symbols-outlined">sports_bar</span>
             </div>
@@ -240,11 +242,11 @@ canvas {
             {% if unread_notifications_count_by_category.Beers > 0 %}
                 <span class="badge bg-danger" id="beers-badge">{{ unread_notifications_count_by_category.Beers }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
     
-    <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'wines' %}">
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'wines' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <span class="material-symbols-outlined">wine_bar</span>
             </div>
@@ -252,11 +254,11 @@ canvas {
             {% if unread_notifications_count_by_category.Wines > 0 %}
                 <span class="badge bg-danger" id="wines-badge">{{ unread_notifications_count_by_category.Wines }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
     
-    <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'whiskeys' %}">
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'whiskeys' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <span class="material-symbols-outlined">local_bar</span>
             </div>
@@ -264,11 +266,11 @@ canvas {
             {% if unread_notifications_count_by_category.Whiskeys > 0 %}
                 <span class="badge bg-danger" id="whiskeys_badge">{{ unread_notifications_count_by_category.Whiskeys }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
     
-    <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'burgers' %}">
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'burgers' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <span class="material-symbols-outlined">lunch_dining</span>
             </div>
@@ -276,11 +278,11 @@ canvas {
             {% if unread_notifications_count_by_category.Burgers > 0 %}
                 <span class="badge bg-danger" id="burgers-badge">{{ unread_notifications_count_by_category.Burgers }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
     
-    <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'taccos' %}">
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'taccos' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <span class="material-symbols-outlined">tapas</span>
             </div>
@@ -288,11 +290,11 @@ canvas {
             {% if unread_notifications_count_by_category.Taccos > 0 %}
                 <span class="badge bg-danger" id="taccos-badge">{{ unread_notifications_count_by_category.Taccos }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
     
-    <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'pizza' %}">
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'pizza' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <span class="material-symbols-outlined">local_pizza</span>
             </div>
@@ -300,11 +302,11 @@ canvas {
             {% if unread_notifications_count_by_category.Pizza > 0 %}
                 <span class="badge bg-danger" id="pizza-badge">{{ unread_notifications_count_by_category.Pizza }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
     
-    <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'sand_wich' %}">
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'sand_wich' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <span class="material-symbols-outlined">lunch_dining</span>
             </div>
@@ -312,11 +314,11 @@ canvas {
             {% if unread_notifications_count_by_category.Sand_Wich > 0 %}
                 <span class="badge bg-danger" id="Sand_Wich-badge">{{ unread_notifications_count_by_category.Sand_Wich }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
     
-    <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="{% url 'chips' %}">
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'chips' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <span class="material-symbols-outlined">fastfood</span>
             </div>
@@ -324,11 +326,11 @@ canvas {
             {% if unread_notifications_count_by_category.Chips > 0 %}
                 <span class="badge bg-danger">{{ unread_notifications_count_by_category.Chips }}</span>
             {% endif %}
-        </a>
-    </li>
+          </a>
+        </li>
 
 
-        <li class="nav-item mx-4">
+        <li class="nav-item mx-1">
           <a class="nav-link text-white " href="#">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <span class="material-symbols-outlined">exit_to_app</span>
@@ -337,6 +339,17 @@ canvas {
           </a>
         </li>
 
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Theme
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="themeDropdown">
+                  <li><a class="dropdown-item theme-option" href="#" data-theme="light">Light</a></li>
+                  <li><a class="dropdown-item theme-option" href="#" data-theme="dark">Dark</a></li>
+                  <li><a class="dropdown-item theme-option" href="#" data-theme="custom">Custom</a></li>
+              </ul>
+          </li>
+          
       </ul>
     </div>
   </nav>

@@ -254,7 +254,12 @@
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">No of People</th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Table Number</th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Time</th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Order Time</th>
+                             <!-- Split Status column -->
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivered</th>
+                      
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -265,6 +270,16 @@
                             <td class="text-center">{{ item.table_number }}</td>
                             <td class="text-center">{{ item.timestamps|date:"Y-m-d" }}</td>
                             <td class="text-center">{{ item.timestamps|time:"H:i:s" }}</td>
+                             <!-- Show pending status -->
+                            <td class="text-center">{{ item.pending }}</td>
+                      
+                            <!-- Delivered checkbox -->
+                            <td class="text-center">
+                              <input type="checkbox" name="delivered_checkbox_{{ forloop.counter }}">
+                            </td>
+                      
+                            <td class="text-center">{{ item.delivery_time }}</td>
+                          </tr>
                         </tr>
                         {% endfor %}
                     </tbody>

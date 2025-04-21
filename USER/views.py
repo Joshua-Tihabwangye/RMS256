@@ -976,7 +976,7 @@ def lunch(request):
     Lunch.objects.filter(is_read=False).update(is_read=True)
     luch_items = Lunch.objects.all()
     context = {'luch_items': luch_items}
-    return render(request, 'Admin/luch.html', context)
+    return render(request, 'Admin/lunch.html', context)
 
 def supper(request):
     Supper.objects.filter(is_read=False).update(is_read=True)

@@ -141,7 +141,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "tihabwangyej@gmail.com"  # Your actual Gmail
 EMAIL_HOST_PASSWORD = "pvpf gkrj ahrq lfvr"
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = "EMAIL_HOST_USER"
 
 SITE_URL = "http://localhost:8000/reset-password/{uid}/{token}/"
 

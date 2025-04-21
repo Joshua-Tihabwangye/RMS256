@@ -28,6 +28,18 @@
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 </head>
 
+<style>
+  thead tr:nth-child(2) th {
+    padding: 0.2rem 0.5rem; /* Adjust padding to make them closer */
+    font-size: 0.7rem; /* Make the text smaller */
+    font-weight: normal; /* Optional: Adjust font weight */
+}
+
+thead tr:nth-child(1) th:nth-child(6) { /* Targeting the "Status" header */
+    padding-bottom: 0.5rem; /* Add some space below "Status" */
+}
+</style>
+
 <body class="g-sidenav-show  bg-gray-200">
   <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
     <div class="sidenav-header">
@@ -249,28 +261,48 @@
             </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
+
+
                 <table class="table align-items-center mb-0">
                   <thead>
-                      <tr>
-                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Food Item</th>
-                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">No of People</th>
-                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Table Number</th>
-                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Time</th>
-                      </tr>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Food Item</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">No of People</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Table Number</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Order Time</th>
+                      
+                      <!-- Split Status column -->
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pending</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivered</th>
+                
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delivery Time</th>
+                    </tr>
                   </thead>
+                
                   <tbody>
-                      {% for item in water_items %}
-                      <tr>
-                          <td>{{ item.food_type }}</td>
-                          <td>{{ item.number_of_people }}</td>
-                          <td class="text-center">{{ item.table_number }}</td>
-                          <td class="text-center">{{ item.timestamps|date:"Y-m-d" }}</td>
-                          <td class="text-center">{{ item.timestamps|time:"H:i:s" }}</td>
-                      </tr>
-                      {% endfor %}
+                    {% for item in water_items %}
+                    <tr>
+                      <td>{{ item.food_type }}</td>
+                      <td>{{ item.number_of_people }}</td>
+                      <td class="text-center">{{ item.table_number }}</td>
+                      <td class="text-center">{{ item.timestamps|date:"Y-m-d" }}</td>
+                      <td class="text-center">{{ item.timestamps|time:"H:i:s" }}</td>
+                
+                      <!-- Show pending status -->
+                      <td class="text-center">{{ item.pending }}</td>
+                
+                      <!-- Delivered checkbox -->
+                      <td class="text-center">
+                        <input type="checkbox" name="delivered_checkbox_{{ forloop.counter }}">
+                      </td>
+                
+                      <td class="text-center">{{ item.delivery_time }}</td>
+                    </tr>
+                    {% endfor %}
                   </tbody>
-              </table>
+                </table>
+                
               
               </div>
             </div>

@@ -59,7 +59,17 @@
             background-color: rgb(61, 60, 59);
             background-color: transparent;
             max-width: 500PX;
+            margin: 1.75rem auto;
+            background-size: cover;
+            padding: 20px;
         }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
         .modal-header {
             background-color: orange;
             justify-content: center;
@@ -75,16 +85,23 @@
             background-color: transparent;
             box-shadow: none;
         }
-        .modal-body {
-            background-size: cover;
-            padding: 20px;
-        }
-        .select {
-            width: 35%;
-            margin-left: 2%;
-            font-size: medium;
-            font-weight: 500;
-        }
+        
+            #burgers-select{
+              width:150px; /* Reduced width */
+            }
+            #taccos-select{
+              width:150px; /* Reduced width */
+            }
+            #pizza-select{
+              width:150px; /* Reduced width */
+            }
+            #sand_wich-select{
+              width:150px; /* Reduced width */
+            }
+            #chips-select{
+              width:150px; /* Reduced width */
+            }
+           
         /* Background container */
         .background-container {
             position: fixed;
@@ -112,7 +129,11 @@
             border-radius: 5%;
             font-weight: bolder;
         }
-
+        
+        .modal-dialog {
+            max-width: 700px; /* Adjust as needed */
+            margin: 30px auto; /* Increase this margin to create more space around the modal */
+          }
     </style>
 </head>
 <body>
@@ -149,9 +170,9 @@
                                 <!-- Check 1 for burgers -->
                                 <div class="form-check pb-3">
                                     <input class="form-check-input" type="checkbox" name="food_item_check_1" id="check1">
-                                    <label class="px-3 text-white form-check-label" for="check1">Burgers</label>
+                                    <label class="px-2 text-white form-check-label" for="check1">Burgers</label>
 
-                                    <select class="select form-select mt-2 mx-5" name="food_item_type_1" id="burgers-select">
+                                    <select class="select form-select mt-4 mx-4" name="food_item_type_1" id="burgers-select">
                                         <option value="">Choose Type</option>
                                         {% for item in burgers_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -170,7 +191,7 @@
                                     <input class="form-check-input" type="checkbox" name="food_item_check_2" id="check2">
                                     <label class="px-3 text-white form-check-label" for="check2">Taccos</label>
 
-                                    <select class="select form-select mt-2 mx-5" name="food_item_type_2" id="taccos-select">
+                                    <select class="select form-select mt-4 mx-4" name="food_item_type_2" id="taccos-select">
                                         <option value="">Choose Type</option>
                                         {% for item in taccos_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -187,11 +208,11 @@
                                 <!-- Check 3 for Pizza -->
                                 <div class="form-check p-3">
                                     <input class="form-check-input" type="checkbox" name="food_item_check_3" id="check3">
-                                    <label class="px-3 text-white form-check-label" for="check3">
+                                    <label class="px-4 text-white form-check-label" for="check3">
                                         Pizza
                                     </label>
 
-                                    <select class="select form-select mt-3 mx-5" name="food_item_type_3" id="pizza-select">
+                                    <select class="select form-select mt-4 mx-4" name="food_item_type_3" id="pizza-select">
                                         <option value="">Choose Type</option>
                                         {% for item in pizza_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -206,13 +227,13 @@
 
 
                                 <!-- Check 4 for Sand wiches -->
-                                <div class="form-check p-3">
-                                    <input class="form-check-input" type="checkbox" name="food_item_check_4" id="check4">
+                                <div class="form-check pb-3">
+                                    <input class="form-check-input " type="checkbox" name="food_item_check_4" id="check4">
                                     <label class="px-3 text-white form-check-label" for="check4">
                                         Sand Wiches
                                     </label>
 
-                                    <select class="select form-select mt-4" name="food_item_type_4" id="sand_wich-select">
+                                    <select class="select form-select mt-4 " name="food_item_type_4" id="sand_wich-select">
                                         <option value="">Choose Type</option>
                                         {% for item in sand_wich_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
@@ -220,7 +241,7 @@
                                     </select>
 
                                     <div class="Input">
-                                        <label class="px-3 modal-label" for="check4-input">No of people</label>
+                                        <label class="px-4 modal-label" for="check4-input">No of people</label>
                                         <input type="text" class="mx-4 form-control" name="number_of_people_4" id="check4-input" placeholder="People" style="width: 80px;">
                                     </div>
                                 </div>
@@ -229,11 +250,11 @@
                                 <!-- Check 5 for chips -->
                                 <div class="form-check p-3">
                                     <input class="form-check-input" type="checkbox" name="food_item_check_5" id="check5">
-                                    <label class="px-3 text-white form-check-label" for="check5">
+                                    <label class="px-4 text-white form-check-label" for="check5">
                                         Chips
                                     </label>
 
-                                    <select class="select form-select mt-2 mx-5" name="food_item_type_5" id="chips-select">
+                                    <select class="select form-select mt-4 mx-4" name="food_item_type_5" id="chips-select">
                                         <option value="">Choose Type</option>
                                         {% for item in chips_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>

@@ -123,6 +123,10 @@
             border-radius: 5%;
             font-weight: bolder;
         }
+        .modal-dialog {
+            max-width: 700px; /* Adjust as needed */
+            margin: 30px auto; /* Increase this margin to create more space around the modal */
+          }
 
     </style>
 </head>
@@ -168,7 +172,7 @@
                                     </label>
 
                                     <select class="select form-select mt-2  mx-5" name="food_item_type_1" id="beers-select">
-                                        <option value="">Choose</optin>
+                                        <option value="">Choose Type</optin>
                                         {% for item in beers_items %}
                                             <option value="{{ item.name }}">{{ item.name }} -- Ugx: {{ item.price }}</option>
                                         {% endfor %}
@@ -176,7 +180,7 @@
 
                                     <div class="Input">
                                         <label class="px-3 modal-label" for="check3-input">No of people</label>
-                                        <input type="text" class="mx-4 form-control" name="number_of_people_1" id="check1-input" placeholder="People" style="width: 80px;">
+                                        <input type="text" class="mx-3 form-control" name="number_of_people_1" id="check1-input" placeholder="People" style="width: 80px;">
                                     </div>
                                 </div>
 
@@ -188,7 +192,7 @@
                                         Wines
                                     </label>
                                     <select class="select form-select mt-2 mx-4" name="food_item_type_2" id="wines-select">
-                                        <option value="">Choose</optin>
+                                        <option value="">Choose Type</optin>
                                             {% for item in wines_items %}
                                             <option value="{{ item.name }}"> {{ item.name }} -- Ugx: {{ item.price }} </option>
                                             {% endfor %}

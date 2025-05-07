@@ -1,1 +1,1 @@
-web: gunicorn RMS256.wsgi:application
+web: gunicorn RMS256.wsgi

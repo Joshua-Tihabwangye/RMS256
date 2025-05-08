@@ -40,15 +40,14 @@ ALLOWED_HOSTS = ['rms256.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'USER',
     'django.contrib.humanize',
-   
 ]
 
 MIDDLEWARE = [

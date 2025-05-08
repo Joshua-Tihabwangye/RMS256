@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 from django.core.wsgi import get_wsgi_application
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

@@ -14,6 +14,11 @@ import os
 from pathlib import Path
 from django.core.mail import send_mail
 from dotenv import load_dotenv
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Menu.settings')
+
+application = get_wsgi_application()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +34,7 @@ SECRET_KEY = 'django-insecure-rsp_91f(d^vx-qvoxrhmix^+=9t^_g4fki4*o#sz!loc$f&2c=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['rms256.onrender.com']
 
 
 # Application definition

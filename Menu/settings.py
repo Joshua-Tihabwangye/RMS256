@@ -16,6 +16,7 @@ from django.core.mail import send_mail
 from dotenv import load_dotenv
 from django.core.wsgi import get_wsgi_application
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Menu.settings')
 
 application = get_wsgi_application()
@@ -40,15 +41,14 @@ ALLOWED_HOSTS = ['rms256.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'USER',
     'django.contrib.humanize',
-   
 ]
 
 MIDDLEWARE = [

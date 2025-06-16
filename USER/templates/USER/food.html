@@ -45,14 +45,32 @@
             display: block;
             margin-bottom: 0.5rem;
         }
+        
         .modal-body {
             background-color: rgb(61, 60, 59);
             background-color: transparent;
-            max-width: 800PX;
-            margin: 1.75rem auto;
             background-size: cover;
             padding: 20px;
+            border-radius: 10px;
         }
+
+        .modal-dialog {
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        @media (min-width: 768px) {
+            .modal-dialog {
+                max-width: 700px;
+                /* Medium size on tablets and desktops */
+            }
+        }
+
+        select.form-select-sm,
+        input.form-control-sm {
+            font-size: 0.9rem;
+        }
+
         .modal-header {
             background-color: orange;
             justify-content: center;
@@ -97,10 +115,6 @@
             font-weight: bolder;
         }
 
-        .modal-dialog {
-            max-width: 700px; /* Adjust as needed */
-            margin: 30px auto; /* Increase this margin to create more space around the modal */
-          }
 
           
     </style>
@@ -135,65 +149,78 @@
                             {% csrf_token %}
                             <div class="form-group">
                                 <!-- Check 1 for breakfast-->
-                                <div class="form-check ">
-                                    <input class="form-check-input" type="checkbox" name="food_item_check_1" id="check1">
-                                    <label class="px-2 text-white form-check-label" for="check1">Breakfast</label>
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_1" id="check1">
+                                        <label class="text-white mb-0" for="check1">Breakfast</label>
+                                    </div>
 
-                                    <select class="select form-select mt-4 mx-6" name="food_item_type_1" id="breakfast-select">
-                                        <option value="">Choose Type</option>
-                                        {% for item in breakfast_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                        {% endfor %}
-                                    </select>
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_1" id="breakfast-select">
+                                            <option value="">Choose Type</option>
+                                            {% for item in breakfast_items %}
+                                                <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                    <div class="Input">
-                                        <label class="px-5 modal-label" for="check1-input">No of people</label>
-                                        <input type="text" class="mx-5 form-control" name="number_of_people_1" id="check1-input" placeholder="People" style="width: 80px;">
+                                    <!-- Input -->
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm" name="number_of_people_1" placeholder="People">
                                     </div>
                                 </div>
 
+                                <!-- Check 2 -->
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_2" id="check2">
+                                        <label class="text-white mb-0" for="check2">Lunch</label>
+                                    </div>
 
-                                <!-- Check 2 for lunch -->
-                                <div class="form-check p-3">
-                                    <input class="form-check-input mx-6" type="checkbox" name="food_item_check_2" id="check2">
-                                    <label class="px-3 text-white form-check-label" for="check2">
-                                        Lunch
-                                    </label>
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_2" id="lunch-select">
+                                            <option value="">Choose Type</option>
+                                            {% for item in lunch_items %}
+                                                <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                    <select class="select form-select mt-4 mx-4" name="food_item_type_2" id="lunch-select">
-                                        <option value="">Choose Type</option>
-                                        {% for item in lunch_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                        {% endfor %}
-                                    </select>
-
-                                    <div class="Input">
-                                        <label class="px-4 modal-label" for="check2-input">No of people</label>
-                                        <input type="text" class="mx-4 form-control" name="number_of_people_2" id="check2-input" placeholder="People" style="width: 80px;">
+                                    <!-- Input -->
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm" name="number_of_people_2" placeholder="People">
                                     </div>
                                 </div>
 
+                                <!-- Check 3 -->
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_3" id="check3">
+                                        <label class="text-white mb-0" for="check3">Supper</label>
+                                    </div>
 
-                                <!-- Check 3 for supper-->
-                                <div class="form-check p-3">
-                                    <input class="form-check-input" type="checkbox" name="food_item_check_3" id="check3">
-                                    <label class="px-3 text-white form-check-label" for="check3">
-                                           Supper 
-                                    </label>
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_3" id="supper-select">
+                                            <option value="">Choose Type</option>
+                                            {% for item in supper_items %}
+                                                <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                    <select class="select form-select mt-4 mx-3" name="food_item_type_3" id="supper-select">
-                                        <option value="">Choose Type</option>
-                                        {% for item in supper_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                        {% endfor %}
-                                    </select>
-
-                                    <div class="Input">
-                                        <label class="px-4 modal-label" for="check3-input">No of people</label>
-                                        <input type="text" class="mx-5 form-control" name="number_of_people_3" id="check3-input" placeholder="People" style="width: 80px;">
+                                    <!-- Input -->
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm" name="number_of_people_3" placeholder="People">
                                     </div>
                                 </div>
-                               
+
+                                
                                 <!-- Table number -->
                                 <div class="form-check Table">
                                     <label class="modal-label" for="table-number">Table number</label>

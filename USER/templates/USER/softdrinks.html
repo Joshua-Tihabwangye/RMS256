@@ -1,13 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Soft Drinks</title>
     <style>
-
         .Head h2 {
             font-size: 2rem;
             color: #ffc107;
@@ -30,19 +30,23 @@
             color: #ffc107;
         }
 
+        
         .form-check {
             display: flex;
             align-items: center;
             margin-bottom: 1rem;
         }
+
         .Names {
             padding-left: 1.5%;
             flex-grow: 1;
             color: white;
         }
+
         .Input {
             padding-left: 3%;
         }
+
         .Table {
             display: flex;
             align-items: center;
@@ -50,41 +54,66 @@
             margin-top: 1rem;
             color: #fff;
         }
+
         .modal-label {
             display: block;
             margin-bottom: 0.5rem;
         }
-        
+
+
+
         .modal-body {
             background-color: rgb(61, 60, 59);
             background-color: transparent;
             background-size: cover;
             padding: 20px;
+            border-radius: 10px;
+        }
+
+        .modal-dialog {
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        @media (min-width: 768px) {
+            .modal-dialog {
+                max-width: 700px;
+                /* Medium size on tablets and desktops */
+            }
+        }
+
+
+        select.form-select-sm,
+        input.form-control-sm {
+            font-size: 0.9rem;
         }
         .modal-header {
             background-color: orange;
             justify-content: center;
         }
-    
+
         .modal-footer {
             background-color: orange;
         }
+
         .modal-label {
             color: white;
         }
+
         .modal-content {
             background-color: transparent;
             box-shadow: none;
         }
-        
+
         .select {
             width: 35%;
             margin-left: 2%;
             font-size: medium;
             font-weight: 500;
         }
-/*Video in the background stylings*/
-.video-container {
+
+        /*Video in the background stylings*/
+        .video-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -111,19 +140,15 @@
         }
 
         .container-alert {
-            background-color: #ffd000; 
-            color: #080808; 
-            border-color: #611a1a; 
+            background-color: #ffd000;
+            color: #080808;
+            border-color: #611a1a;
             border-radius: 5%;
             font-weight: bolder;
         }
-        .modal-dialog {
-            max-width: 700px; /* Adjust as needed */
-            margin: 30px auto; /* Increase this margin to create more space around the modal */
-          }
-
     </style>
 </head>
+
 <body>
 
 
@@ -134,12 +159,11 @@
         <video src="{% static 'images/w2.mp4' %}" type="video/mp4" muted></video>
     </div>
 
- 
+
 
     <div class="container">
-
-
-        <div class="modal fade show" id="softdrinksModal" tabindex="-1" aria-labelledby="softdrinksModalLabel" aria-hidden="true" style="display: block;" data-bs-backdrop="static">
+        <div class="modal fade show" id="softdrinksModal" tabindex="-1" aria-labelledby="softdrinksModalLabel"
+            aria-hidden="true" style="display: block;" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -148,101 +172,139 @@
                     <div class="modal-body">
                         <form method="post" action="{% url 'softdrinks' %}">
 
-                                {% if messages %}
-                                    <div class="container-alert mt-3">
-                                        {% for message in messages %}
-                                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                                {{ message }}
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
+                            {% if messages %}
+                            <div class="container-alert mt-3">
+                                {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
 
 
                             {% csrf_token %}
                             <div class="form-group">
                                 <!-- Check 1 -->
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="food_item_check_1" id="check1">
-                                    <label class="px-3 text-white form-check-label" for="check1">Water</label>
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_1"
+                                            id="check1">
+                                        <label class="text-white mb-0" for="check1">Water</label>
+                                    </div>
 
-                                    <select class="select form-select mt-2 mx-5" name="food_item_type_1" id="water-select">
-                                        <option value="">Choose Type</option>
-                                        {% for item in water_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    
-                                    
-                                    <div class="Input">
-                                        <label class="px-2 modal-label" for="check1-input">No of people</label>
-                                        <input type="text" class="mx-2 form-control" name="number_of_people_1" id="check1-input" placeholder="People" style="width: 80px;">
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_1"
+                                            id="water-select">
+                                            <option value="">Choose Type</option>
+                                            {% for item in water_items %}
+                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <!-- Input -->
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="number_of_people_1" placeholder="People">
                                     </div>
                                 </div>
+
                                 <!-- Check 2 -->
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="food_item_check_2" id="check2">
-                                    <label class="px-3 text-white form-check-label" for="check2">
-                                        Soda
-                                    </label>
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_2"
+                                            id="check2">
+                                        <label class="text-white mb-0" for="check2">Soda</label>
+                                    </div>
 
-                                    <select class="select form-select mt-2 mx-5" name="food_item_type_2" id="soda-select">
-                                        <option value="">Choose Type</option>
-                                        {% for item in soda_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    
-                                    <div class="Input">
-                                        <label class="px-2 modal-label" for="check2-input">No of people</label>
-                                        <input type="text" class="mx-2 form-control" name="number_of_people_2" id="check2-input" placeholder="People" style="width: 80px;">
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_2"
+                                            id="soda-select">
+                                            <option value="">Choose Type</option>
+                                            {% for item in soda_items %}
+                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <!-- Input -->
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="number_of_people_2" placeholder="People">
                                     </div>
                                 </div>
+
                                 <!-- Check 3 -->
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="food_item_check_3" id="check3">
-                                    <label class="px-3 text-white form-check-label" for="check3">
-                                        Juices
-                                    </label>
-                                    
-                                    <select class="select form-select mt-2 mx-5" name="food_item_type_3" id="juice-select">
-                                        <option value="">Choose Type</option>
-                                        {% for item in juice_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_3"
+                                            id="check3">
+                                        <label class="text-white mb-0" for="check3">Juice</label>
+                                    </div>
 
-                                    <div class="Input">
-                                        <label class="px-2 modal-label" for="check3-input">No of people</label>
-                                        <input type="text" class="mx-2 form-control" name="number_of_people_3" id="check3-input" placeholder="People" style="width: 80px;">
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_3"
+                                            id="juice-select">
+                                            <option value="">Choose Type</option>
+                                            {% for item in juice_items %}
+                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <!-- Input -->
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="number_of_people_3" placeholder="People">
                                     </div>
                                 </div>
+
                                 <!-- Check 4 -->
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="food_item_check_4" id="check4">
-                                    <label class="px-2 text-white form-check-label" for="check4">
-                                        Energy drink
-                                    </label>
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_4"
+                                            id="check4">
+                                        <label class="text-white mb-0" for="check4">Energy drinks</label>
+                                    </div>
 
-                                    <select class="select form-select mt-2" name="food_item_type_4" id="energy-drink_select">
-                                        <option value="">Choose Type</option>
-                                        {% for item in energy_drink_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_4"
+                                            id="energy_drinks-select">
+                                            <option value="">Choose Type</option>
+                                            {% for item in energy_drinks_items %}
+                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                    <div class="Input">
-                                        <label class="px-5 modal-label" for="check4-input">No of people</label>
-                                        <input type="text" class="mx-5 form-control" name="number_of_people_4" id="check4-input" placeholder="People" style="width: 80px;">
+                                    <!-- Input -->
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="number_of_people_4" placeholder="People">
                                     </div>
                                 </div>
+
+
                                 <!-- Table number -->
                                 <div class="form-check Table">
                                     <label class="modal-label" for="table-number">Table number</label>
-                                    <input type="text" class="table form-control" name="table_number" id="table-number" placeholder="Table" style="width: 80px; margin-left: 0.5rem;" required>
+                                    <input type="text" class="table form-control" name="table_number" id="table-number"
+                                        placeholder="Table" style="width: 80px; margin-left: 0.5rem;" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -257,7 +319,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -285,4 +347,5 @@
 
     </script>
 </body>
+
 </html>

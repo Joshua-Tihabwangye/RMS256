@@ -2,3 +2,4 @@ django
 pusher
 dotenv
 gunicorn
+whitenoise

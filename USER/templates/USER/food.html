@@ -157,9 +157,9 @@
                                     </div>
 
                                     <!-- Dropdown -->
-                                    <div class="col-5">
+                                    <div class="col-5 mx-2">
                                         <select class="form-select form-select-sm" name="food_item_type_1" id="breakfast-select">
-                                            <option value="">Choose Type</option>
+                                            <option value="">Choose</option>
                                             {% for item in breakfast_items %}
                                                 <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
                                             {% endfor %}
@@ -181,9 +181,9 @@
                                     </div>
 
                                     <!-- Dropdown -->
-                                    <div class="col-5">
+                                    <div class="col-5 mx-2">
                                         <select class="form-select form-select-sm" name="food_item_type_2" id="lunch-select">
-                                            <option value="">Choose Type</option>
+                                            <option value="">Choose</option>
                                             {% for item in lunch_items %}
                                                 <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
                                             {% endfor %}
@@ -205,16 +205,16 @@
                                     </div>
 
                                     <!-- Dropdown -->
-                                    <div class="col-5">
+                                    <div class="col-5 mx-2">
                                         <select class="form-select form-select-sm" name="food_item_type_3" id="supper-select">
-                                            <option value="">Choose Type</option>
+                                            <option value="">Choose</option>
                                             {% for item in supper_items %}
                                                 <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}</option>
-                                            {% endfor %}
+                                             {% endfor %}
                                         </select>
                                     </div>
 
-                                    
+                                     
                                     <!-- Input -->
                                     <div class="col-3">
                                         <input type="text" class="form-control form-control-sm" name="number_of_people_3" placeholder="People">

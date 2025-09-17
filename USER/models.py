@@ -307,7 +307,7 @@ class Chips(models.Model):
     number_of_people = models.IntegerField(null=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
-    timestamps = models.DateTimeField(auto_now_
+    timestamps = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)  
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"

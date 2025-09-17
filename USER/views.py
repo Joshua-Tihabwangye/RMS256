@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Breakfast, Lunch, Supper, Soda, Energydrink, Juices, Water, Wines, Whiskeys, Beers, Burgers, Taccos, Sand_Wich, Pizza, Chips 
+from .models import Breakfast, Lunch, Supper, Soda, Energydrink, Juices, Water, Wines, Whiskeys, Beers, Burgers, Taccos, Sand_Wich, Pizza, Chips, CompletedOrder 
 from .models import FoodItem, FoodItemForm, DrinksItem, DrinksItemForm, alcoholicDrinksItem, alcoholicDrinksItemForm, edit_fast_foodsItem, edit_fast_foodsItemForm  
 from django.http import JsonResponse
 from django.contrib import messages
@@ -43,6 +43,8 @@ from .pusher_instance import pusher_client
 import logging
 
 from USER import models
+from django.db.models import Sum
+from django.db.models import Sum, Count
 
 
 
@@ -81,11 +83,24 @@ def food(request):
             number_of_people = request.POST.get('number_of_people_1', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+            #Fetching the prices from teh FoodItem model to save them in the order table.
+                food_item = FoodItem.objects.get(name= food_type)
+                unit_price = food_item.price
+                total_price = unit_price* number_of_people_int
+
                 Breakfast.objects.create(
                     table_number=int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people=number_of_people_int,
+                    unit_price = unit_price,
+                    total_price =   total_price
             )
+            
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Breakfast")
+
                 # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
 
@@ -109,11 +124,24 @@ def food(request):
             number_of_people = request.POST.get('number_of_people_2', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                #Fetching the prices from teh FoodItem model to save them in the order table.
+                food_item = FoodItem.objects.filter(name= food_type).first()
+                unit_price = food_item.price
+                total_price = unit_price* number_of_people_int
+
                 Lunch.objects.create(
                     table_number=int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people=number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Lunch")
+
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
 
@@ -138,11 +166,24 @@ def food(request):
             number_of_people = request.POST.get('number_of_people_3', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                #Fetching the prices from the FoodItem model to save them in the order table.
+                food_item = FoodItem.objects.filter(name=food_type).first()
+                unit_price = food_item.price
+                total_price = unit_price*number_of_people_int
+
                 Supper.objects.create(
-                    table_number=int(table_number),
+                    table_number= int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people = number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+                
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Supper")
+
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
 
@@ -207,6 +248,10 @@ def edit_foods(request):
 #=========================== VIEWS FOR SOFT DRINKS ======================
 
 def softdrinks(request):
+    """
+    A Django view to handle soft drinks orders.
+    It retrieves drink items by category and processes POST requests to save new orders.
+    """
     water_items = DrinksItem.objects.filter(category='Water')
     soda_items = DrinksItem.objects.filter(category='Soda')
     juice_items = DrinksItem.objects.filter(category='Juices')
@@ -216,33 +261,44 @@ def softdrinks(request):
         table_number = request.POST.get('table_number')
         order_placed = False
         errors_present = False  # Track if any error message was added
-       
+        
         # Handling water
         if request.POST.get('food_item_check_1'):
             food_type = request.POST.get('food_item_type_1')
-            number_of_people = request.POST.get('number_of_people_1', 0)
+            number_of_people = request.POST.get('number_of_people_1')
             category = "Water"
 
             if table_number and number_of_people and number_of_people.isdigit():
-                Water.objects.create(
-                    table_number= int(table_number),
-                    food_type=food_type,
-                    number_of_people=int(number_of_people)
+                number_of_people_int = int(number_of_people)
+                
+                # Fetch the item price from the DrinksItem model
+                drink_item = DrinksItem.objects.get(name=food_type)
+                unit_price = drink_item.price
+                total_price = unit_price * number_of_people_int
 
+                # Create the new order with the total price
+                Water.objects.create(
+                    table_number=int(table_number),
+                    food_type=food_type,
+                    number_of_people=number_of_people_int,
+                    unit_price=unit_price,
+                    total_price=total_price
                 )
 
-                 # Send notification to the admin
-                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Water")
+
+                # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people_int} people at table {table_number}"
 
                 try:
                     # Trigger Pusher event
-                    pusher_client.trigger(f'order-channel-Water', 'new-order-event', {
-                    'message': message
-                    })
+                    # pusher_client.trigger(f'order-channel-Water', 'new-order-event', {
+                    #     'message': message
+                    # })
+                    pass # Placeholder if Pusher is not set up
                 except Exception as e:
                     logging.error(f"Pusher error: {e}")
-                # You can also show a fallback message or continue silently
-
                 
                 order_placed = True
             else:
@@ -255,30 +311,42 @@ def softdrinks(request):
             number_of_people = request.POST.get('number_of_people_2', 0)
             category = "Soda"
 
-            if table_number and number_of_people and number_of_people.isdigit():
+            if table_number and number_of_people and str(number_of_people).isdigit():
+                number_of_people_int = int(number_of_people)
+                
+                # Fetch the item price from the DrinksItem model
+                drink_item = DrinksItem.objects.get(name=food_type)
+                unit_price = drink_item.price
+                total_price = unit_price * number_of_people_int
+
+                # Create the new order with the total price
                 Soda.objects.create(
-                    table_number= int(table_number),
+                    table_number=int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people=number_of_people_int,
+                    unit_price=unit_price,
+                    total_price=total_price
                 )
                 
-                 # Send notification to the admin
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Soda")
+
+                # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
 
                 try:
                     # Trigger Pusher event
-                    pusher_client.trigger(f'order-channel-Soda', 'new-order-event', {
-                    'message': message
-                    })
+                    # pusher_client.trigger(f'order-channel-Soda', 'new-order-event', {
+                    #     'message': message
+                    # })
+                    pass
                 except Exception as e:
                     logging.error(f"Pusher error: {e}")
-                # You can also show a fallback message or continue silently
-
 
                 order_placed = True
             else:
                 errors_present = True
-                
+                messages.error(request, 'Invalid details for Soda. Please fill in all fields correctly.') # Corrected empty message
 
         # Handling juices
         if request.POST.get('food_item_check_3'):
@@ -286,24 +354,37 @@ def softdrinks(request):
             number_of_people = request.POST.get('number_of_people_3', 0)
             category = "Juices"
 
-            if table_number and number_of_people and number_of_people.isdigit():
+            if table_number and number_of_people and str(number_of_people).isdigit():
+                number_of_people_int = int(number_of_people)
+                
+                # Fetch the item price from the DrinksItem model
+                drink_item = DrinksItem.objects.get(name=food_type)
+                unit_price = drink_item.price
+                total_price = unit_price * number_of_people_int
+
+                # Create the new order with the total price
                 Juices.objects.create(
-                    table_number= int(table_number),
+                    table_number=int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people=number_of_people_int,
+                    unit_price=unit_price,
+                    total_price=total_price
                 )
                 
-                 # Send notification to the admin
-                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Juices")
 
+                # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+#
                 try:
                     # Trigger Pusher event
-                    pusher_client.trigger(f'order-channel-Juices', 'new-order-event', {
-                    'message': message
-                    })
+                    # pusher_client.trigger(f'order-channel-Juices', 'new-order-event', {
+                    #     'message': message
+                    # })
+                    pass
                 except Exception as e:
                     logging.error(f"Pusher error: {e}")
-                # You can also show a fallback message or continue silently
 
                 order_placed = True
             else:
@@ -314,26 +395,39 @@ def softdrinks(request):
         if request.POST.get('food_item_check_4'):
             food_type = request.POST.get('food_item_type_4')
             number_of_people = request.POST.get('number_of_people_4', 0)
-
             category = "Energydrinks"
 
-            if table_number and number_of_people and number_of_people.isdigit():
+            if table_number and number_of_people and str(number_of_people).isdigit():
+                number_of_people_int = int(number_of_people)
+                
+                # Fetch the item price from the DrinksItem model
+                drink_item = DrinksItem.objects.get(name=food_type)
+                unit_price = drink_item.price
+                total_price = unit_price * number_of_people_int
+
+                # Create the new order with the total price
                 Energydrink.objects.create(
-                    table_number= int(table_number),
-                    food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    table_number = int(table_number),
+                    food_type = food_type,
+                    number_of_people = number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
-                 # Send notification to the admin
-                message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Energydrink")
+
+                # Send notification to the admin
+                message = f"New order for {food_type}: {number_of_people_int} people at table {table_number}"
 
                 try:
                     # Trigger Pusher event
-                    pusher_client.trigger(f'order-channel-Energydrink', 'new-order-event', {
-                    'message': message
-                    })
+                    # pusher_client.trigger(f'order-channel-Energydrink', 'new-order-event', {
+                    #     'message': message
+                    # })
+                    pass
                 except Exception as e:
                     logging.error(f"Pusher error: {e}")
-                # You can also show a fallback message or continue silently
 
                 order_placed = True
             else:
@@ -343,8 +437,8 @@ def softdrinks(request):
         # Check if at least one order was placed
         if order_placed:
             messages.success(request, 'Your order has been placed successfully!')
-        elif not errors_present:  # Only add the generic error if any specific error messages were added
-            messages.error(request, 'Please provide valid details for the food item selected! ')
+        elif not errors_present:
+            messages.error(request, 'Please provide valid details for the food item selected!')
 
     return render(request, 'USER/softdrinks.html', {
         'water_items': water_items,
@@ -399,11 +493,23 @@ def alcohol(request):
             number_of_people = request.POST.get('number_of_people_1', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+
+                number_of_people_int = int(number_of_people)
+                # Fetch the item price from the DrinksItem model
+                alcoholicDrinks_item = alcoholicDrinksItem.objects.get(name=food_type)
+                unit_price = alcoholicDrinks_item.price
+                total_price = unit_price * number_of_people_int
+
                 Beers.objects.create(
                     table_number= int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people=number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Beers")
 
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -429,11 +535,23 @@ def alcohol(request):
             number_of_people = request.POST.get('number_of_people_2', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                # Fetch the item price from the DrinksItem model
+                alcoholicDrinks_item = alcoholicDrinksItem.objects.get(name= food_type)
+                unit_price = alcoholicDrinks_item.price
+                total_price = unit_price*number_of_people_int
+                
                 Wines.objects.create(
                     table_number= int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people=number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Wines")
 
                 # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -458,11 +576,23 @@ def alcohol(request):
             number_of_people = request.POST.get('number_of_people_3', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+
+                number_of_people_int = int(number_of_people)
+                # Fetch the item price from the DrinksItem model
+                alcoholicDrinks_item = alcoholicDrinksItem.objects.get(name=food_type)
+                unit_price = alcoholicDrinks_item.price
+                total_price = unit_price*number_of_people_int
+
                 Whiskeys.objects.create(
                     table_number= int(table_number),
                     food_type=food_type,
-                    number_of_people=int(number_of_people)
+                    number_of_people= number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Whiskeys")
 
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -543,11 +673,23 @@ def fast_foods(request):
             number_of_people = request.POST.get('number_of_people_1', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                # Fetch the item price from the DrinksItem model
+                fast_foods_items = edit_fast_foodsItem.objects.get(name=food_type)
+                unit_price = fast_foods_items.price
+                total_price = unit_price*number_of_people_int
+
                 Burgers.objects.create(
                     food_type = food_type,
                     table_number = int(table_number),
-                    number_of_people = int(number_of_people),
+                    number_of_people = number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Burgers")
 
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -573,11 +715,23 @@ def fast_foods(request):
             number_of_people = request.POST.get('number_of_people_2', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                # Fetch the item price from the DrinksItem model
+                fast_foods_items = edit_fast_foodsItem.objects.get(name=food_type)
+                unit_price = fast_foods_items.price
+                total_price = unit_price*number_of_people_int
+
                 Taccos.objects.create(
                     food_type = food_type,
                     table_number = int(table_number),
-                    number_of_people = int(number_of_people),
+                    number_of_people = number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Taccos")
 
                 # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -603,11 +757,23 @@ def fast_foods(request):
             number_of_people = request.POST.get('number_of_people_3', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                # Fetch the item price from the DrinksItem model
+                fast_foods_items = edit_fast_foodsItem.objects.get(name=food_type)
+                unit_price = fast_foods_items.price
+                total_price = unit_price*number_of_people_int
+
                 Pizza.objects.create(
                     food_type = food_type,
                     table_number = int(table_number),
-                    number_of_people = int(number_of_people),
+                    number_of_people = number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Pizza")  
 
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -633,11 +799,23 @@ def fast_foods(request):
             number_of_people = request.POST.get('number_of_people_4')
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                # Fetch the item price from the DrinksItem model
+                fast_foods_items = edit_fast_foodsItem.objects.get(name=food_type)
+                unit_price = fast_foods_items.price
+                total_price = unit_price*number_of_people_int
+
                 Sand_Wich.objects.create(
                     food_type = food_type,
                     table_number = int(table_number),
-                    number_of_people = int(number_of_people),
+                    number_of_people = number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Sand_Wich")
 
                 # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -663,11 +841,23 @@ def fast_foods(request):
             number_of_people = request.POST.get('number_of_people_5', 0)
 
             if table_number and number_of_people and number_of_people.isdigit():
+                number_of_people_int = int(number_of_people)
+
+                # Fetch the item price from the DrinksItem model
+                fast_foods_items = edit_fast_foodsItem.objects.get(name=food_type)
+                unit_price = fast_foods_items.price
+                total_price = unit_price*number_of_people_int
+
                 Chips.objects.create(
                     food_type = food_type,
                     table_number = int(table_number),
-                    number_of_people = int(number_of_people)
+                    number_of_people = number_of_people_int,
+                    unit_price = unit_price,
+                    total_price = total_price
                 )
+
+                #Saving in the Complete_Order table.
+                save_completed_order(table_number, food_type, number_of_people, "Chips")
 
                  # Send notification to the admin
                 message = f"New order for {food_type}: {number_of_people} people at table {table_number}"
@@ -882,6 +1072,19 @@ def dashboard(request):
     else:
         most_placed_order = "No orders this month"
 
+
+
+  
+    # Calculate revenue for the day, week, month, and year
+    daily_revenue = CompletedOrder.objects.filter(timestamps__date=today).aggregate(total_price=Sum('price'))['total_price'] or 0
+    weekly_revenue = CompletedOrder.objects.filter(timestamps__date__gte=today - timedelta(days=7)).aggregate(total_price=Sum('price'))['total_price'] or 0
+    monthly_revenue = CompletedOrder.objects.filter(timestamps__year=today.year, timestamps__month=today.month).aggregate(total_price=Sum('price'))['total_price'] or 0
+    yearly_revenue = CompletedOrder.objects.filter(timestamps__year=today.year).aggregate(total_price=Sum('price'))['total_price'] or 0
+    
+    # Also get recent orders
+    recent_orders = CompletedOrder.objects.order_by('-timestamps')[:5] # Get the 5 most recent orders
+ 
+
     # Unread notifications count by category
     unread_notifications_count_by_category = {
         'Soda': Soda.objects.filter(is_read=False).count(),
@@ -913,6 +1116,11 @@ def dashboard(request):
         'monthly_orders': monthly_orders,
         'most_placed_order': most_placed_order,
         'unread_notifications_count_by_category': unread_notifications_count_by_category,
+
+        'daily_revenue': daily_revenue,
+        'weekly_revenue': weekly_revenue,
+        'monthly_revenue': monthly_revenue,
+        'yearly_revenue': yearly_revenue,
     }
     
     return render(request, 'Admin/dashboard.html', context)
@@ -960,6 +1168,46 @@ def chart_data(request):
 
 
 
+
+def save_completed_order(table_number, food_type, number_of_people, category):
+    # Match category with correct menu model
+    category_item_models = {
+        'Water': DrinksItem,
+        'Soda': DrinksItem,
+        'Juices': DrinksItem,
+        'Energydrink': DrinksItem,
+        'Beers': alcoholicDrinksItem,
+        'Wines': alcoholicDrinksItem,
+        'Whiskeys': alcoholicDrinksItem,
+        'Breakfast': FoodItem,
+        'Lunch': FoodItem,
+        'Supper': FoodItem,
+        'Burgers': edit_fast_foodsItem,
+        'Taccos': edit_fast_foodsItem,
+        'Pizza':  edit_fast_foodsItem,
+        'Sand_Wich': edit_fast_foodsItem,
+        'Chips': edit_fast_foodsItem,
+    }
+
+    ItemModel = category_item_models.get(category)
+
+    if ItemModel:
+        number_of_people_int = int(number_of_people)
+        item = ItemModel.objects.filter(name=food_type, category=category).first()
+        
+        if item:
+            unit_price = item.price
+            total_price = unit_price * number_of_people_int
+
+            CompletedOrder.objects.create(
+                table_number=table_number,
+                item_type=food_type,
+                number_of_people=number_of_people_int,
+                category=category,
+                price=total_price
+            )
+        else:
+            print(f"⚠️ Item {food_type} not found in category {category}")
 
 
 
@@ -1064,7 +1312,9 @@ def sand_wich(request):
 
 
 
+
 def signout(request):
-    return render(request, "Admin/signout.html")
+    logout(request)
+    return redirect('signin') 
 
 

@@ -28,7 +28,8 @@ SECRET_KEY = 'django-insecure-rsp_91f(d^vx-qvoxrhmix^+=9t^_g4fki4*o#sz!loc$f&2c=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['rms256.onrender.com']
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "rms256.onrender.com"]
+
 
 
 # Application definition
@@ -162,3 +163,9 @@ PUSHER_CONFIG = {
     "cluster": os.getenv("PUSHER_CLUSTER", "ap2"),
     "ssl": True
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://rms256.onrender.com",
+]

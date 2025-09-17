@@ -43,7 +43,8 @@
 
 .buttons-container{
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 5%;
   margin-top: 1rem;
   padding: 0 1rem;
   flex-wrap: wrap; /* Allow buttons to wrap */
@@ -119,8 +120,17 @@ canvas {
                 width: 100%; /* Make buttons full-width on phones */
             }
         }
-
- 
+.text h4 {
+  text-align: center;
+  padding-top: 8%;
+}
+.text h6 {
+  text-align: center;
+  padding-top: 8%;
+}
+.Revenue {
+  padding-top: 5%;
+}
 
 </style>
 
@@ -219,6 +229,20 @@ canvas {
           </a>
         </li>
       
+
+        <li class="nav-item mx-1">
+          <a class="nav-link text-white" href="{% url 'juices' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">water_drop</i>
+              </div>
+              <span class="nav-link-text ms-1">Juices</span>
+
+            {% if unread_notifications_count_by_category.Juices > 0 %}
+              <span class="badge bg-danger" id="soda-badge">{{ unread_notifications_count_by_category.Juices }}</span>
+            {% endif %}
+          </a>
+        </li>
+
         <li class="nav-item mx-1">
           <a class="nav-link text-white" href="{% url 'water' %}">
               <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -331,7 +355,7 @@ canvas {
 
 
         <li class="nav-item mx-1">
-          <a class="nav-link text-white " href="#">
+          <a class="nav-link text-white " href="{% url 'signout' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <span class="material-symbols-outlined">exit_to_app</span>
             </div>
@@ -376,7 +400,7 @@ canvas {
           
                 
             <li class="nav-item d-flex align-items-center">
-              <a href="#" class="nav-link text-body font-weight-bold px-0">
+              <a href="{% url 'signout' %}" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none">Log Out</span>
               </a>
@@ -399,14 +423,14 @@ canvas {
                   <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                       <i class="material-icons opacity-10">today</i>
                   </div>
-                  <div class="text-end pt-1">
-                      <h5 class="text-sm mb-0">Today's Orders</h5>
+                  <div class="text">
+                      <h5 class="text-sm text-end">Today's Orders</h5>
                       <h4 class="text-dark">{{ daily_orders }}</h4>
                   </div>
               </div>
               <hr class="dark horizontal my-0">
               <div class="card-footer p-3">
-                  <p class="mb-0">Total number of orders placed today.</p>
+                  <p class="text-center">Total number of orders for today.</p>
               </div>
           </div>
       </div>
@@ -418,14 +442,14 @@ canvas {
               <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">date_range</i>
               </div>
-              <div class="text-end pt-1">
-                <h5 class="text-sm mb-0">This Week's Orders</h5>
+              <div class="text">
+                <h5 class="text-sm text-end">This Week's Orders</h5>
                 <h4 class="text-primary">{{ weekly_orders }}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3">
-              <p class="mb-0">Total number of orders placed this week.</p>
+              <p class="text-center">Total number of orders for this week.</p>
             </div>
           </div>
         </div>
@@ -437,14 +461,14 @@ canvas {
               <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">calendar_today</i>
               </div>
-              <div class="text-end pt-1">
-                <h5 class="text-sm mb-0">This Month's Orders</h5>
+              <div class="text">
+                <h5 class="text-sm text-end">This Month's Orders</h5>
                 <h4 class="text-success">{{ monthly_orders }}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3">
-              <p class="mb-0">Total number of orders placed this month.</p>
+              <p class="text-center">Total number of orders in this month.</p>
             </div>
           </div>
         </div>
@@ -456,14 +480,14 @@ canvas {
               <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">star</i>
               </div>
-              <div class="text-end pt-1">
-                <h5 class="text-sm mb-0">Most Ordered Item</h5>
-                <h4 class="text-info">{{ most_placed_order }}</h4>
+              <div class="text">
+                <h5 class="text-sm text-end">Most Ordered Item</h5>
+                <h6 class="text-info">{{ most_placed_order }}</h6>
               </div>
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3">
-              <p class="mb-0">The most placed order this month.</p>
+              <p class="text-center">The most placed order this month.</p>
             </div>
           </div>
         </div>
@@ -502,6 +526,91 @@ canvas {
                 <button class="btn btn-dark" type="button">Edit Fast Foods</button>
             </a>
           </div>
+          
+
+
+
+
+
+<!--=========== REVENUE ===========================-->
+
+        <div class="Revenue">
+          <div class="container-fluid py-4">
+              <div class="row">
+                  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                      <div class="card">
+                          <div class="card-header p-3 pt-2">
+                              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                                  <i class="material-icons opacity-10">attach_money</i>
+                              </div>
+                              <div class="text">
+                                  <h5 class="text-sm text-end">Revenue @ Day</h5>
+                                  <h4 class="text-dark">{{ daily_revenue|floatformat:2 }}</h4>
+                              </div>
+                          </div>
+                          <hr class="dark horizontal my-0">
+                          <div class="card-footer p-3">
+                              <p class="text-center">Total Revenue today.</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                      <div class="card">
+                          <div class="card-header p-3 pt-2">
+                              <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                                  <i class="material-icons opacity-10">monetization_on</i>
+                              </div>
+                              <div class="text">
+                                  <h5 class="text-sm text-end">Revenue @ Week</h5>
+                                  <h4 class="text-primary">{{ weekly_revenue }}</h4>
+                              </div>
+                          </div>
+                          <hr class="dark horizontal my-0">
+                          <div class="card-footer p-3">
+                              <p class="text-center">Total Revenue of this week.</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                      <div class="card">
+                          <div class="card-header p-3 pt-2">
+                              <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                                  <i class="material-icons opacity-10">payments</i>
+                              </div>
+                              <div class="text">
+                                  <h5 class="text-sm text-end">Revenue @ Month</h5>
+                                  <h4 class="text-success">{{ monthly_revenue }}</h4>
+                              </div>
+                          </div>
+                          <hr class="dark horizontal my-0">
+                          <div class="card-footer p-3">
+                              <p class="text-center">Total Revenue of this month.</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="col-xl-3 col-sm-6">
+                      <div class="card">
+                          <div class="card-header p-3 pt-2">
+                              <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                                  <i class="material-icons opacity-10">trending_up</i>
+                              </div>
+                              <div class="text">
+                                  <h5 class="text-sm text-end">Annual Revenue</h5>
+                                  <h6 class="text-info">{{ yearly_revenue }}</h6>
+                              </div>
+                          </div>
+                          <hr class="dark horizontal my-0">
+                          <div class="card-footer p-3">
+                              <p class="text-center">Cummulative Revenue for this year .</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>  
   
       
   </div>

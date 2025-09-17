@@ -54,8 +54,10 @@ class Breakfast(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -64,8 +66,10 @@ class Lunch(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this
+    is_read = models.BooleanField(default=False)  
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -74,8 +78,10 @@ class Supper(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -111,8 +117,10 @@ class Soda(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this
+    is_read = models.BooleanField(default=False)  
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -121,8 +129,10 @@ class Water(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this
+    is_read = models.BooleanField(default=False)  
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -131,8 +141,10 @@ class Energydrink(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this
+    is_read = models.BooleanField(default=False)  
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -141,8 +153,10 @@ class Juices(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True) 
-    is_read = models.BooleanField(default=False)  # Add this
+    is_read = models.BooleanField(default=False)  
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -180,8 +194,10 @@ class Beers(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -190,8 +206,10 @@ class Wines(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this
+    is_read = models.BooleanField(default=False)  
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -200,8 +218,10 @@ class Whiskeys(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -236,8 +256,10 @@ class Burgers(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -246,8 +268,10 @@ class Taccos(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
@@ -256,8 +280,10 @@ class Pizza(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.number_of_people}"
@@ -266,8 +292,10 @@ class Sand_Wich(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
     timestamps = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)  # Add this 
+    is_read = models.BooleanField(default=False)   
 
     def __str__(self):
         return f"Table {self.table_number} - {self.number_of_people}"
@@ -277,8 +305,10 @@ class Chips(models.Model):
     table_number = models.IntegerField(null=False)
     food_type = models.CharField(max_length=255, null=False)
     number_of_people = models.IntegerField(null=False)
-    timestamps = models.DateTimeField(auto_now_add=True) 
-    is_read = models.BooleanField(default=False)  # Add this
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True) 
+    timestamps = models.DateTimeField(auto_now_
+    is_read = models.BooleanField(default=False)  
     def __str__(self):
         return f"Table {self.table_number} - {self.food_type}"
     
@@ -310,6 +340,17 @@ class Sand_WichForm(forms.ModelForm):
 
 
 
+
+class CompletedOrder(models.Model):
+    table_number = models.IntegerField()
+    item_type = models.CharField(max_length=100)
+    number_of_people = models.IntegerField(default=0)
+    category = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamps = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order for Table {self.table_number}: {self.item_type} - ({self.price})"
 
 
 

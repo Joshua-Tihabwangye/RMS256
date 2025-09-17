@@ -187,12 +187,39 @@
                                     <div class="col-3 d-flex align-items-center">
                                         <input class="form-check-input me-2" type="checkbox" name="food_item_check_1"
                                             id="check1">
-                                        <label class="text-white mb-0" for="check1">Wine</label>
+                                        <label class="text-white mb-0" for="check1">Beer</label>
                                     </div>
 
                                     <!-- Dropdown -->
                                     <div class="col-5">
                                         <select class="form-select form-select-sm" name="food_item_type_1"id="wines-select">
+                                            <option value="">Choose</option>
+                                            {% for item in beers_items %}
+                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <!-- Input -->
+                                    <div class="col-4">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="number_of_people_1" placeholder="Orders">
+                                    </div>
+                                </div>
+
+                                <!-- Check 2 -->
+                                <div class="row align-items-center mb-3 pt-3">
+                                    <!-- Checkbox and Label -->
+                                    <div class="col-3 d-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_2"
+                                            id="check2">
+                                        <label class="text-white mb-0" for="check2">Wine</label>
+                                    </div>
+
+                                    <!-- Dropdown -->
+                                    <div class="col-5">
+                                        <select class="form-select form-select-sm" name="food_item_type_2"id="whiskeys-select">
                                             <option value="">Choose</option>
                                             {% for item in wines_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
@@ -204,34 +231,7 @@
                                     <!-- Input -->
                                     <div class="col-4">
                                         <input type="text" class="form-control form-control-sm"
-                                            name="number_of_people_1" placeholder="People">
-                                    </div>
-                                </div>
-
-                                <!-- Check 2 -->
-                                <div class="row align-items-center mb-3 pt-3">
-                                    <!-- Checkbox and Label -->
-                                    <div class="col-3 d-flex align-items-center">
-                                        <input class="form-check-input me-2" type="checkbox" name="food_item_check_2"
-                                            id="check2">
-                                        <label class="text-white mb-0" for="check2">Whiskeys</label>
-                                    </div>
-
-                                    <!-- Dropdown -->
-                                    <div class="col-5">
-                                        <select class="form-select form-select-sm" name="food_item_type_2"id="whiskeys-select">
-                                            <option value="">Choose</option>
-                                            {% for item in whiskeys_items %}
-                                            <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
-                                            </option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-
-                                    <!-- Input -->
-                                    <div class="col-4">
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="number_of_people_2" placeholder="People">
+                                            name="number_of_people_2" placeholder="Orders">
                                     </div>
                                 </div>
 
@@ -242,14 +242,14 @@
                                     <div class="col-3 d-flex align-items-center">
                                         <input class="form-check-input me-2" type="checkbox" name="food_item_check_3"
                                             id="check3">
-                                        <label class="text-white mb-0" for="check3">Beer</label>
+                                        <label class="text-white mb-0" for="check3">Whiskey</label>
                                     </div>
 
                                     <!-- Dropdown -->
                                     <div class="col-5">
                                         <select class="form-select form-select-sm" name="food_item_type_3"id="beers-select">
                                             <option value="">Choose</option>
-                                            {% for item in beers_items %}
+                                            {% for item in whiskeys_items %}
                                             <option value="{{ item.name }}">{{ item.name }} - Ugx: {{ item.price }}
                                             </option>
                                             {% endfor %}
@@ -260,7 +260,7 @@
                                     <!-- Input -->
                                     <div class="col-4">
                                         <input type="text" class="form-control form-control-sm"
-                                            name="number_of_people_3" placeholder="People">
+                                            name="number_of_people_3" placeholder="Orders">
                                     </div>
                                 </div>
 

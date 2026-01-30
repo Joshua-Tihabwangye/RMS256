@@ -1,0 +1,14 @@
+.order-menu-page h1 { margin-bottom: 1rem; font-size: 1.75rem; }
+.order-menu-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .order-menu-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .order-menu-grid { grid-template-columns: repeat(3, 1fr); } }
+.order-menu-grid .card h3 { font-size: 1.1rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); }
+.menu-list { list-style: none; }
+.menu-list li { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid var(--color-border); flex-wrap: wrap; }
+.menu-list .item-name { flex: 1; }
+.menu-list .item-price { font-weight: 600; color: var(--color-primary); }
+.btn-sm { padding: 0.4rem 0.75rem; font-size: 0.875rem; }
+.order-modal { position: fixed; bottom: 1rem; left: 1rem; right: 1rem; max-width: 400px; margin: 0 auto; z-index: 50; box-shadow: var(--shadow-lg); }
+@media (min-width: 768px) { .order-modal { bottom: auto; left: 50%; top: 50%; transform: translate(-50%, -50%); } }
+.modal-actions { display: flex; gap: 0.75rem; margin-top: 1rem; }
+.modal-actions .btn { flex: 1; }

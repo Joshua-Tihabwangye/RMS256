@@ -1,0 +1,60 @@
+/* Shared styles for auth pages: SignIn, SignUp, ForgotPassword, ResetPassword */
+.auth-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.auth-container {
+  max-width: 420px;
+}
+
+.auth-card {
+  padding: 2rem;
+}
+
+.auth-card h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.auth-sub {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.auth-card .btn-block {
+  margin-top: 0.5rem;
+}
+
+.auth-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.checkbox-label input { width: auto; }
+
+.forgot-link {
+  font-size: 0.9rem;
+}
+
+.auth-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}

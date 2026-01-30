@@ -1,0 +1,47 @@
+.dashboard-page h1 { margin-bottom: 1.5rem; font-size: 1.75rem; }
+
+.stats-grid,
+.revenue-grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label { font-size: 0.875rem; color: var(--color-text-muted); }
+.stat-value { font-size: 1.5rem; font-weight: 700; color: var(--color-primary); }
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 120px;
+  margin-top: 1rem;
+}
+
+.chart-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 32px;
+  min-height: 4px;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.dashboard-page .card { margin-bottom: 1rem; }
+.dashboard-page .card h3 { font-size: 1rem; margin-bottom: 0.5rem; }

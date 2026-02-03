@@ -1,7 +1,0 @@
-django
-pusher
-dotenv
-gunicorn
-whitenoise
-transformers
-torch

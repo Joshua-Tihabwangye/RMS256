@@ -1,33 +1,74 @@
 import { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
   const [navOpen, setNavOpen] = useState(false);
   const { token } = useAuth();
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
+
   return (
     <div className="layout">
       <header className="header">
         <div className="container header-inner">
           <Link to="/" className="logo">
-            J.T Restaurant
+            <span className="logo-icon">🍽️</span>
+            <span className="logo-text">J.T Restaurant</span>
           </Link>
           <nav className={`nav ${navOpen ? 'show' : ''}`}>
-            <Link to="/food" onClick={() => setNavOpen(false)}>Food</Link>
-            <Link to="/softdrinks" onClick={() => setNavOpen(false)}>Soft Drinks</Link>
-            <Link to="/alcohol" onClick={() => setNavOpen(false)}>Alcohol</Link>
-            <Link to="/fast-foods" onClick={() => setNavOpen(false)}>Fast Foods</Link>
+            <Link
+              to="/food"
+              className={isActive('/food') ? 'active' : ''}
+              onClick={() => setNavOpen(false)}
+            >
+              🍽️ Food
+            </Link>
+            <Link
+              to="/softdrinks"
+              className={isActive('/softdrinks') ? 'active' : ''}
+              onClick={() => setNavOpen(false)}
+            >
+              🥤 Drinks
+            </Link>
+            <Link
+              to="/fast-foods"
+              className={isActive('/fast-foods') ? 'active' : ''}
+              onClick={() => setNavOpen(false)}
+            >
+              🍔 Fast Foods
+            </Link>
+            <Link
+              to="/alcohol"
+              className={isActive('/alcohol') ? 'active' : ''}
+              onClick={() => setNavOpen(false)}
+            >
+              🍷 Alcohol
+            </Link>
+            <div className="nav-divider" />
             {token ? (
-              <Link to="/dashboard" className="btn btn-primary" onClick={() => setNavOpen(false)}>Dashboard</Link>
+              <Link to="/dashboard" className="btn btn-primary" onClick={() => setNavOpen(false)}>
+                📊 Dashboard
+              </Link>
             ) : (
               <>
-                <Link to="/signin" className="btn btn-primary" onClick={() => setNavOpen(false)}>Sign In</Link>
-                <Link to="/signup" className="btn btn-secondary" onClick={() => setNavOpen(false)}>Sign Up</Link>
+                <Link to="/signin" className="btn btn-primary" onClick={() => setNavOpen(false)}>
+                  Sign In
+                </Link>
+                <Link to="/signup" className="btn btn-secondary" onClick={() => setNavOpen(false)}>
+                  Sign Up
+                </Link>
               </>
             )}
           </nav>
-          <button type="button" className="menu-toggle" aria-label="Menu" onClick={() => setNavOpen((o) => !o)}>
-            <span /><span /><span />
+          <button
+            type="button"
+            className="menu-toggle"
+            aria-label="Menu"
+            onClick={() => setNavOpen((o) => !o)}
+          >
+            <span className={navOpen ? 'open' : ''} />
           </button>
         </div>
       </header>
@@ -35,8 +76,20 @@ export default function Layout() {
         <Outlet />
       </main>
       <footer className="footer">
-        <div className="container">
-          <p>© J.T Restaurant. Order & enjoy.</p>
+        <div className="container footer-inner">
+          <div className="footer-brand">
+            <span className="footer-logo">🍽️ J.T Restaurant</span>
+            <p>You Love it, You want it, We serve it.</p>
+          </div>
+          <div className="footer-links">
+            <Link to="/food">Food</Link>
+            <Link to="/softdrinks">Drinks</Link>
+            <Link to="/fast-foods">Fast Foods</Link>
+            <Link to="/alcohol">Alcohol</Link>
+          </div>
+          <div className="footer-copyright">
+            <p>© {new Date().getFullYear()} J.T Restaurant. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

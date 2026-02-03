@@ -11,6 +11,7 @@ import OrderMenu from './pages/OrderMenu/OrderMenu';
 import Dashboard from './pages/Dashboard/Dashboard';
 import EditMenu from './pages/EditMenu/EditMenu';
 import OrdersList from './pages/OrdersList/OrdersList';
+import Tables from './pages/Tables/Tables';
 import './index.css';
 import './components/Layout.css';
 import './components/AdminLayout.css';
@@ -33,6 +34,9 @@ function App() {
           </Route>
           <Route path="/dashboard" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
+          </Route>
+          <Route path="/admin/tables" element={<AdminLayout />}>
+            <Route index element={<Tables />} />
           </Route>
           <Route path="/admin/edit-foods" element={<AdminLayout />}>
             <Route index element={<EditMenu />} />

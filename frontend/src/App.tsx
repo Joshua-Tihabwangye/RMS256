@@ -23,36 +23,32 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="signin" element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
             <Route path="food" element={<OrderMenu />} />
             <Route path="softdrinks" element={<OrderMenu />} />
             <Route path="alcohol" element={<OrderMenu />} />
             <Route path="fast-foods" element={<OrderMenu />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="reset-password/:uidb64/:token" element={<ResetPassword />} />
           </Route>
-          <Route path="/dashboard" element={<AdminLayout />}>
+
+          <Route path="/admin/login" element={<SignIn />} />
+          <Route path="/admin/signup" element={<SignUp />} />
+          <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin/reset-password/:uidb64/:token" element={<ResetPassword />} />
+
+          <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="tables" element={<Tables />} />
+            <Route path="edit-foods" element={<EditMenu />} />
+            <Route path="edit-drinks" element={<EditMenu />} />
+            <Route path="edit-alcohol" element={<EditMenu />} />
+            <Route path="edit-fast-foods" element={<EditMenu />} />
+            <Route path="orders/:category" element={<OrdersList />} />
           </Route>
-          <Route path="/admin/tables" element={<AdminLayout />}>
-            <Route index element={<Tables />} />
-          </Route>
-          <Route path="/admin/edit-foods" element={<AdminLayout />}>
-            <Route index element={<EditMenu />} />
-          </Route>
-          <Route path="/admin/edit-drinks" element={<AdminLayout />}>
-            <Route index element={<EditMenu />} />
-          </Route>
-          <Route path="/admin/edit-alcohol" element={<AdminLayout />}>
-            <Route index element={<EditMenu />} />
-          </Route>
-          <Route path="/admin/edit-fast-foods" element={<AdminLayout />}>
-            <Route index element={<EditMenu />} />
-          </Route>
-          <Route path="/admin/orders/:category" element={<AdminLayout />}>
-            <Route index element={<OrdersList />} />
-          </Route>
+
+          <Route path="/signin" element={<Navigate to="/admin/login" replace />} />
+          <Route path="/signup" element={<Navigate to="/admin/signup" replace />} />
+          <Route path="/forgot-password" element={<Navigate to="/admin/forgot-password" replace />} />
+          <Route path="/dashboard" element={<Navigate to="/admin" replace />} />
+          <Route path="reset-password/:uidb64/:token" element={<ResetPassword />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

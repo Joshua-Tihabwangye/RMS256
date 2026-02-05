@@ -18,7 +18,7 @@ export default function SignIn() {
     setLoading(true);
     try {
       await login(username, password);
-      navigate('/dashboard');
+      navigate('/admin');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed');
     } finally {
@@ -90,7 +90,7 @@ export default function SignIn() {
                 <span className="checkbox-custom" />
                 <span>Show password</span>
               </label>
-              <Link to="/forgot-password" className="forgot-link">Forgot password?</Link>
+              <Link to="/admin/forgot-password" className="forgot-link">Forgot password?</Link>
             </div>
             <button 
               type="submit" 
@@ -106,7 +106,7 @@ export default function SignIn() {
           </div>
 
           <p className="auth-footer">
-            Don&apos;t have an account? <Link to="/signup">Create one</Link>
+            Don&apos;t have an account? <Link to="/admin/signup">Create one</Link>
           </p>
         </div>
       </div>

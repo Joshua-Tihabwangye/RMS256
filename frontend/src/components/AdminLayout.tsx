@@ -14,7 +14,7 @@ const NAV_GROUPS: NavGroup[] = [
     title: 'Overview',
     icon: '📊',
     items: [
-      { label: 'Dashboard', path: '/dashboard', icon: '📈' },
+      { label: 'Dashboard', path: '/admin', icon: '📈' },
       { label: 'Tables', path: '/admin/tables', icon: '🪑' },
     ],
   },
@@ -77,14 +77,14 @@ export default function AdminLayout() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    if (!token) navigate('/signin', { replace: true });
+    if (!token) navigate('/admin/login', { replace: true });
   }, [token, navigate]);
 
   if (!token) return null;
 
   async function handleLogout() {
     await logout();
-    navigate('/signin');
+    navigate('/admin/login');
   }
 
   function toggleGroup(title: string) {
@@ -94,6 +94,7 @@ export default function AdminLayout() {
   }
 
   function isActiveLink(path: string) {
+    if (path === '/admin') return location.pathname === '/admin';
     return location.pathname === path || location.pathname.startsWith(path + '/');
   }
 
@@ -101,7 +102,7 @@ export default function AdminLayout() {
     <div className="admin-layout">
       {/* Mobile Header */}
       <header className="admin-mobile-header">
-        <Link to="/dashboard" className="admin-mobile-logo">
+        <Link to="/admin" className="admin-mobile-logo">
           <span className="logo-icon">🍽️</span>
           J.T Admin
         </Link>
@@ -118,7 +119,7 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className={`admin-sidebar ${mobileNavOpen ? 'open' : ''}`}>
         <div className="admin-sidebar-header">
-          <Link to="/dashboard" className="admin-logo">
+          <Link to="/admin" className="admin-logo">
             <span className="logo-icon">🍽️</span>
             <span className="logo-text">J.T Restaurant</span>
           </Link>

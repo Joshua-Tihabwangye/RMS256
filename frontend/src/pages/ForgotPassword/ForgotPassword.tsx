@@ -51,7 +51,7 @@ export default function ForgotPassword() {
             </button>
           </form>
           <p className="auth-footer">
-            <Link to="/signin">Back to Sign In</Link>
+            <Link to="/admin/login">Back to Sign In</Link>
           </p>
         </div>
       </div>

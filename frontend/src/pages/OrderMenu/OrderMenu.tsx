@@ -172,6 +172,7 @@ export default function OrderMenu() {
         ))}
       </div>
 
+
       {/* Hero Section */}
       <div className="order-menu-hero">
         <div className="order-menu-hero-bg" />
@@ -182,6 +183,35 @@ export default function OrderMenu() {
           <p className="order-menu-subtitle">{config.subtitle}</p>
         </div>
       </div>
+
+  {/* Table Selection - Below Orders */}
+      <div className="container">
+        <div className="table-selection-section">
+          <h3 className="table-selection-title">
+            <span className="table-icon">🪑</span>
+            Select Your Table
+          </h3>
+          <p className="table-selection-subtitle">Choose a table number before placing your order</p>
+          <div className="table-selector">
+            {TABLES.map((tableNum) => (
+              <button
+                key={tableNum}
+                type="button"
+                className={`table-selector-item ${selectedTable === tableNum ? 'selected' : ''}`}
+                onClick={() => setSelectedTable(tableNum)}
+              >
+                Table {tableNum}
+              </button>
+            ))}
+          </div>
+          {selectedTable && (
+            <div className="selected-table-badge">
+              <span>✓</span> Table {selectedTable} Selected
+            </div>
+          )}
+        </div>
+      </div>
+
 
       {/* Menu Sections */}
       <div className="container order-menu-sections">
@@ -216,33 +246,7 @@ export default function OrderMenu() {
         ))}
       </div>
 
-      {/* Table Selection - Below Orders */}
-      <div className="container">
-        <div className="table-selection-section">
-          <h3 className="table-selection-title">
-            <span className="table-icon">🪑</span>
-            Select Your Table
-          </h3>
-          <p className="table-selection-subtitle">Choose a table number before placing your order</p>
-          <div className="table-selector">
-            {TABLES.map((tableNum) => (
-              <button
-                key={tableNum}
-                type="button"
-                className={`table-selector-item ${selectedTable === tableNum ? 'selected' : ''}`}
-                onClick={() => setSelectedTable(tableNum)}
-              >
-                Table {tableNum}
-              </button>
-            ))}
-          </div>
-          {selectedTable && (
-            <div className="selected-table-badge">
-              <span>✓</span> Table {selectedTable} Selected
-            </div>
-          )}
-        </div>
-      </div>
+
 
       {/* Order Modal */}
       {selected && (

@@ -193,6 +193,20 @@
   }
 }
 
+@media (max-width: 480px) {
+  .header-inner {
+    padding: 0.75rem 0.75rem;
+  }
+
+  .logo {
+    font-size: 1.05rem;
+  }
+
+  .logo-icon {
+    font-size: 1.35rem;
+  }
+}
+
 /* ===== MAIN ===== */
 .main {
   flex: 1;

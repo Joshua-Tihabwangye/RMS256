@@ -19,7 +19,7 @@ export default function SignUp() {
     setLoading(true);
     try {
       await register(username, email, password);
-      navigate('/dashboard');
+      navigate('/admin');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed');
     } finally {
@@ -118,7 +118,7 @@ export default function SignUp() {
           </div>
 
           <p className="auth-footer">
-            Already have an account? <Link to="/signin">Sign in</Link>
+            Already have an account? <Link to="/admin/login">Sign in</Link>
           </p>
         </div>
       </div>

@@ -85,9 +85,7 @@ export default function Home() {
             <Link to="/food" className="btn btn-primary btn-xl">
               <span>🍽️</span> View Menu
             </Link>
-            <Link to="/signin" className="btn btn-dark btn-xl">
-              <span>🔐</span> Admin Login
-            </Link>
+
           </div>
           <div className="hero-stats">
             <div className="hero-stat">

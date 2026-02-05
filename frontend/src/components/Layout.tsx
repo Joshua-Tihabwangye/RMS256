@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
   const [navOpen, setNavOpen] = useState(false);
-  const { token } = useAuth();
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -46,21 +44,6 @@ export default function Layout() {
             >
               🍷 Alcohol
             </Link>
-            <div className="nav-divider" />
-            {token ? (
-              <Link to="/dashboard" className="btn btn-primary" onClick={() => setNavOpen(false)}>
-                📊 Dashboard
-              </Link>
-            ) : (
-              <>
-                <Link to="/signin" className="btn btn-primary" onClick={() => setNavOpen(false)}>
-                  Sign In
-                </Link>
-                <Link to="/signup" className="btn btn-secondary" onClick={() => setNavOpen(false)}>
-                  Sign Up
-                </Link>
-              </>
-            )}
           </nav>
           <button
             type="button"

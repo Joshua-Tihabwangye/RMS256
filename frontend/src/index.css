@@ -70,6 +70,11 @@
   --radius-xl: 24px;
   --radius-2xl: 32px;
   --radius-full: 9999px;
+
+  /* Responsive Spacing */
+  --container-pad: clamp(1rem, 3vw, 2rem);
+  --section-pad-y: clamp(2.5rem, 6vw, 5rem);
+  --card-pad: clamp(1.25rem, 2.5vw, 2rem);
   
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -104,6 +109,13 @@ body {
   min-height: 100vh;
 }
 
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Links */
 a {
   color: var(--color-primary);
@@ -132,15 +144,7 @@ h4 { font-size: 1.125rem; }
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1rem;
-}
-
-@media (min-width: 768px) {
-  .container { padding: 0 1.5rem; }
-}
-
-@media (min-width: 1024px) {
-  .container { padding: 0 2rem; }
+  padding: 0 var(--container-pad);
 }
 
 /* Buttons */
@@ -163,6 +167,7 @@ button {
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
+  min-height: 44px;
 }
 
 .btn::before {
@@ -267,6 +272,25 @@ button {
   border-radius: var(--radius);
 }
 
+@media (max-width: 640px) {
+  .btn {
+    font-size: 0.9rem;
+  }
+
+  .btn-lg {
+    padding: 0.9rem 1.5rem;
+  }
+
+  .btn-xl {
+    padding: 1rem 1.75rem;
+    font-size: 1rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+}
+
 /* Inputs */
 input, select, textarea {
   font-family: inherit;
@@ -294,6 +318,7 @@ input, select, textarea {
   border-radius: var(--radius);
   background: var(--color-card);
   transition: all var(--transition-fast);
+  min-height: 48px;
 }
 
 .input-group input:focus,

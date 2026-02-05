@@ -80,7 +80,7 @@ export default function OrdersList() {
       {/* Header */}
       <div className="orders-header">
         <div>
-          <Link to="/dashboard" className="back-link">← Back to Dashboard</Link>
+          <Link to="/admin" className="back-link">← Back to Dashboard</Link>
           <h1>{icon} {title} Orders</h1>
           <p className="orders-subtitle">View and manage {title.toLowerCase()} orders</p>
         </div>

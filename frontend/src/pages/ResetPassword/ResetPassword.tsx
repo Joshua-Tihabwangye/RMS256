@@ -31,7 +31,7 @@ export default function ResetPassword() {
         confirm_password: confirmPassword,
       });
       setMessage({ type: 'success', text: 'Password reset successfully. You can now log in.' });
-      setTimeout(() => navigate('/signin'), 2000);
+      setTimeout(() => navigate('/admin/login'), 2000);
     } catch (err) {
       setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Reset failed.' });
     } finally {
@@ -46,7 +46,7 @@ export default function ResetPassword() {
           <div className="card auth-card">
             <h1>Invalid link</h1>
             <p className="auth-sub">Invalid or expired password reset link. Please request a new one.</p>
-            <Link to="/forgot-password" className="btn btn-primary">Request new link</Link>
+            <Link to="/admin/forgot-password" className="btn btn-primary">Request new link</Link>
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@ export default function ResetPassword() {
             </button>
           </form>
           <p className="auth-footer">
-            <Link to="/signin">Back to Sign In</Link>
+            <Link to="/admin/login">Back to Sign In</Link>
           </p>
         </div>
       </div>

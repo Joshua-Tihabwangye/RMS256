@@ -147,9 +147,10 @@
 .menu-section-inner {
   position: relative;
   z-index: 1;
-  background: var(--color-card);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 250, 251, 0.95));
   padding: 2rem;
   border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border-light);
 }
 
 @media (min-width: 768px) {
@@ -221,9 +222,9 @@
 
 /* ===== TABLE SELECTION ===== */
 .table-selection-section {
-  margin-top: 3rem;
+  margin: 2.5rem 0;
   padding: 2.5rem;
-  background: var(--color-card);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
   border-radius: var(--radius-xl);
   border: 1px solid var(--color-border-light);
   box-shadow: var(--shadow-md);
@@ -330,8 +331,8 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 420px;
+  width: 92vw;
+  max-width: 640px;
   background: var(--color-card);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-2xl);
@@ -378,6 +379,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   padding: 1rem;
   background: var(--color-surface-alt);
   border-radius: var(--radius);
@@ -387,11 +389,17 @@
 .order-modal-item-name {
   font-weight: 600;
   font-size: 1rem;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .order-modal-item-price {
   color: var(--color-text-muted);
   font-size: 0.875rem;
+  white-space: nowrap;
 }
 
 .quantity-control {
@@ -603,5 +611,48 @@
   .toast {
     min-width: auto;
     width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .order-menu-subtitle {
+    font-size: 1rem;
+  }
+
+  .menu-section-title {
+    font-size: 1.25rem;
+  }
+
+  .menu-section-inner {
+    padding: 1.25rem;
+  }
+
+  .table-selection-section {
+    padding: 1.5rem;
+  }
+
+  .order-modal-header,
+  .order-modal-body,
+  .order-modal-footer {
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-section-inner {
+    padding: 1.1rem;
+  }
+
+  .menu-list-item {
+    padding: 0.75rem 0;
+  }
+
+  .order-modal {
+    width: 96%;
+    max-width: 360px;
+  }
+
+  .toast {
+    padding: 0.85rem 1rem;
   }
 }

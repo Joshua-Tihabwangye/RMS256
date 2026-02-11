@@ -18,6 +18,12 @@ from django.core.wsgi import get_wsgi_application
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv()
+
+
+def _split_env_list(name):
+    raw = os.getenv(name, "")
+    return [v.strip() for v in raw.split(",") if v.strip()]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -28,7 +34,11 @@ SECRET_KEY = 'django-insecure-rsp_91f(d^vx-qvoxrhmix^+=9t^_g4fki4*o#sz!loc$f&2c=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://your-vercel-project-name.vercel.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = _split_env_list("ALLOWED_HOSTS") or [
+    "rms256.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 
@@ -158,8 +168,6 @@ DEFAULT_FROM_EMAIL = "EMAIL_HOST_USER"
 SITE_URL = "http://localhost:8000/reset-password/{uid}/{token}/"
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
-load_dotenv()
-
 PUSHER_CONFIG = {
     "app_id": os.getenv("PUSHER_APP_ID", "1953073"),
     "key": os.getenv("PUSHER_KEY", "644784d465f437c7a662"),
@@ -168,12 +176,11 @@ PUSHER_CONFIG = {
     "ssl": True
 }
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
+CSRF_TRUSTED_ORIGINS = _split_env_list("CSRF_TRUSTED_ORIGINS") or [
+    "https://rms-256.vercel.app",
+    "https://rms256.onrender.com",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://rms256.onrender.com",
 ]
 
 # REST framework & JWT (for React frontend)
@@ -193,7 +200,8 @@ SIMPLE_JWT = {
 }
 
 # CORS: allow React dev server and production frontend
-CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = _split_env_list("CORS_ALLOWED_ORIGINS") or [
+    "https://rms-256.vercel.app",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",

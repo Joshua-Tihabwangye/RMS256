@@ -8,8 +8,8 @@
 
 /* ===== SIDEBAR ===== */
 .admin-sidebar {
-  width: 280px;
-  min-width: 280px;
+  width: 320px;
+  min-width: 320px;
   background: linear-gradient(180deg, #18181b 0%, #27272a 100%);
   color: white;
   display: flex;
@@ -202,10 +202,20 @@
   background: rgba(239, 68, 68, 0.15);
 }
 
+.admin-theme-footer {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  padding-left: 1.25rem;
+}
+
+.admin-theme-footer:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 /* ===== MAIN CONTENT ===== */
 .admin-main {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 320px;
   padding: 2rem;
   overflow: auto;
   min-height: 100vh;
@@ -237,6 +247,27 @@
   font-weight: 700;
   font-size: 1.125rem;
   text-decoration: none;
+}
+
+.admin-mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-theme-toggle {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  font-size: 1rem;
+}
+
+.admin-theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .admin-menu-toggle {

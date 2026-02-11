@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { useEffect } from 'react';
 
 interface NavGroup {
@@ -71,6 +72,7 @@ const NAV_GROUPS: NavGroup[] = [
 
 export default function AdminLayout() {
   const { token, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedGroups, setExpandedGroups] = useState<string[]>(['Overview', 'Menu Management']);
@@ -106,14 +108,24 @@ export default function AdminLayout() {
           <span className="logo-icon">🍽️</span>
           J.T Admin
         </Link>
-        <button
-          type="button"
-          className="admin-menu-toggle"
-          onClick={() => setMobileNavOpen(!mobileNavOpen)}
-          aria-label="Toggle menu"
-        >
-          <span className={mobileNavOpen ? 'open' : ''} />
-        </button>
+        <div className="admin-mobile-actions">
+          <button
+            type="button"
+            className="admin-theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? '🌙' : '☀️'}
+          </button>
+          <button
+            type="button"
+            className="admin-menu-toggle"
+            onClick={() => setMobileNavOpen(!mobileNavOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className={mobileNavOpen ? 'open' : ''} />
+          </button>
+        </div>
       </header>
 
       {/* Sidebar */}
@@ -164,6 +176,10 @@ export default function AdminLayout() {
             <span className="nav-item-icon">🌐</span>
             View Site
           </Link>
+          <button type="button" className="nav-item admin-theme-footer" onClick={toggleTheme}>
+            <span className="nav-item-icon">{theme === 'dark' ? '🌙' : '☀️'}</span>
+            Theme: {theme === 'dark' ? 'Dark' : 'Light'}
+          </button>
           <button type="button" className="btn btn-ghost logout-btn" onClick={handleLogout}>
             <span>🚪</span>
             Sign Out

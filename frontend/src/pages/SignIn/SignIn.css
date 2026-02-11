@@ -302,3 +302,49 @@
     transform: translateY(0);
   }
 }
+
+[data-theme="dark"] .auth-card,
+[data-theme="dark"] .auth-card.glass {
+  background: linear-gradient(180deg, rgba(20, 26, 36, 0.98), rgba(16, 21, 30, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .auth-logo,
+[data-theme="dark"] .auth-header h1 {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .auth-subtitle {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .auth-card .input-group label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .auth-card .input-group input {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .auth-card .input-group input::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .password-toggle {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+[data-theme="dark"] .checkbox-label,
+[data-theme="dark"] .auth-footer {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .forgot-link,
+[data-theme="dark"] .auth-footer a {
+  color: #f8fafc;
+  border-bottom-color: rgba(248, 250, 252, 0.4);
+}

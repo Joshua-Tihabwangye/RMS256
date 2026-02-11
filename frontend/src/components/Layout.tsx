@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Layout() {
   const [navOpen, setNavOpen] = useState(false);
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -45,6 +47,15 @@ export default function Layout() {
               🍷 Alcohol
             </Link>
           </nav>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            <span className="theme-toggle-icon">{theme === 'dark' ? '🌙' : '☀️'}</span>
+            <span className="theme-toggle-text">{theme === 'dark' ? 'Dark' : 'Light'}</span>
+          </button>
           <button
             type="button"
             className="menu-toggle"

@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import type { MenuItem } from '../../types';
 import { adminApi } from '../../api';
+import CurrencyControls from '../../components/CurrencyControls';
+import { useCurrency } from '../../hooks/useCurrency';
+import { convertFromBase, convertToBase, formatCurrency } from '../../utils/currency';
 import './EditMenu.css';
 
-const MENU_APIS: Record<string, { list: () => Promise<MenuItem[]>; add: (d: Partial<MenuItem>) => Promise<MenuItem>; delete: (id: number) => Promise<void> }> = {
+const MENU_APIS: Record<string, { list: () => Promise<MenuItem[]>; add: (d: Partial<MenuItem>) => Promise<MenuItem>; update: (id: number, d: Partial<MenuItem>) => Promise<MenuItem>; delete: (id: number) => Promise<void> }> = {
   'edit-foods': adminApi.menu.food,
   'edit-drinks': adminApi.menu.drinks,
   'edit-alcohol': adminApi.menu.alcohol,
@@ -21,13 +24,16 @@ const TITLES: Record<string, { title: string; icon: string; subtitle: string }> 
 export default function EditMenu() {
   const path = useLocation().pathname.split('/').filter(Boolean).pop() || '';
   const type = path;
+  const { currencies, selected, selectedCode, setSelectedCode } = useCurrency();
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [modalMode, setModalMode] = useState<'add' | 'edit' | null>(null);
+  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [saving, setSaving] = useState(false);
   const api = type ? MENU_APIS[type] : null;
   const config = type ? TITLES[type] : null;
 
@@ -36,19 +42,64 @@ export default function EditMenu() {
     api.list().then(setItems).finally(() => setLoading(false));
   }, [api]);
 
-  async function addItem(e: React.FormEvent) {
+  function openAddModal() {
+    setEditingItem(null);
+    setName('');
+    setPrice('');
+    setCategory('');
+    setMessage(null);
+    setModalMode('add');
+  }
+
+  function openEditModal(item: MenuItem) {
+    const converted = convertFromBase(Number(item.price), selected);
+    setEditingItem(item);
+    setName(item.name);
+    setCategory(item.category);
+    setPrice(Number.isFinite(converted) ? converted.toFixed(2) : '');
+    setMessage(null);
+    setModalMode('edit');
+  }
+
+  function closeModal() {
+    setModalMode(null);
+    setEditingItem(null);
+    setMessage(null);
+  }
+
+  async function submitItem(e: React.FormEvent) {
     e.preventDefault();
     if (!api || !name.trim() || !price.trim() || !category.trim()) return;
+    const priceValue = Number(price);
+    if (!Number.isFinite(priceValue)) {
+      setMessage({ type: 'error', text: 'Enter a valid price.' });
+      return;
+    }
+    const basePrice = convertToBase(priceValue, selected);
+    const payload = { name: name.trim(), price: basePrice.toFixed(2), category: category.trim() };
     setMessage(null);
+    setSaving(true);
     try {
-      const created = await api.add({ name: name.trim(), price: price.trim(), category: category.trim() });
-      setItems((prev) => [...prev, created]);
-      setName(''); setPrice(''); setCategory('');
-      setShowAddForm(false);
-      setMessage({ type: 'success', text: 'Item added successfully!' });
-      setTimeout(() => setMessage(null), 3000);
+      if (modalMode === 'edit' && editingItem) {
+        const updated = await api.update(editingItem.id, payload);
+        setItems((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
+        setMessage({ type: 'success', text: 'Item updated successfully!' });
+      } else {
+        const created = await api.add(payload);
+        setItems((prev) => [...prev, created]);
+        setMessage({ type: 'success', text: 'Item added successfully!' });
+      }
+      setName('');
+      setPrice('');
+      setCategory('');
+      // Show success briefly then close
+      setTimeout(() => {
+        closeModal();
+      }, 1500);
     } catch (err) {
-      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to add item' });
+      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to save item. Please try again.' });
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -81,6 +132,7 @@ export default function EditMenu() {
   }
 
   const categories = [...new Set(items.map((i) => i.category))];
+  const isEditing = modalMode === 'edit';
 
   return (
     <div className="edit-menu-page">
@@ -93,10 +145,18 @@ export default function EditMenu() {
         <button
           type="button"
           className="btn btn-primary btn-lg"
-          onClick={() => setShowAddForm(true)}
+          onClick={openAddModal}
         >
           <span>+</span> Add Item
         </button>
+      </div>
+
+      <div className="edit-menu-toolbar">
+        <CurrencyControls
+          currencies={currencies}
+          selectedCode={selectedCode}
+          onChange={setSelectedCode}
+        />
       </div>
 
       {/* Stats */}
@@ -111,10 +171,15 @@ export default function EditMenu() {
           <span className="stat-value">{categories.length}</span>
           <span className="stat-label">Categories</span>
         </div>
+        <div className="stat-pill">
+          <span className="stat-icon">💱</span>
+          <span className="stat-value">{selected.symbol} {selected.code}</span>
+          <span className="stat-label">Active Currency</span>
+        </div>
       </div>
 
-      {/* Message */}
-      {message && (
+      {/* Page-level Message (for delete, etc.) */}
+      {message && !modalMode && (
         <div className={`alert alert-${message.type}`}>
           {message.type === 'success' ? '✓' : '✕'} {message.text}
         </div>
@@ -127,9 +192,9 @@ export default function EditMenu() {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Price</th>
+                <th>Price ({selected.code})</th>
                 <th>Category</th>
-                <th style={{ width: 100 }}>Actions</th>
+                <th style={{ width: 180 }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -147,19 +212,30 @@ export default function EditMenu() {
                       <span className="item-name-cell">{item.name}</span>
                     </td>
                     <td>
-                      <span className="price-badge">${Number(item.price).toFixed(2)}</span>
+                      <span className="price-badge">
+                        {formatCurrency(convertFromBase(Number(item.price), selected), selected)}
+                      </span>
                     </td>
                     <td>
                       <span className="category-badge">{item.category}</span>
                     </td>
                     <td>
-                      <button
-                        type="button"
-                        className="btn btn-ghost btn-sm delete-btn"
-                        onClick={() => removeItem(item.id)}
-                      >
-                        🗑️ Delete
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          type="button"
+                          className="btn btn-ghost btn-sm edit-btn"
+                          onClick={() => openEditModal(item)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-ghost btn-sm delete-btn"
+                          onClick={() => removeItem(item.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -169,23 +245,32 @@ export default function EditMenu() {
         </div>
       </div>
 
-      {/* Add Item Modal */}
-      {showAddForm && (
+      {/* Add/Edit Item Modal */}
+      {modalMode && (
         <>
-          <div className="modal-backdrop" onClick={() => setShowAddForm(false)} />
+          <div className="modal-backdrop" onClick={closeModal} />
           <div className="add-item-modal">
             <div className="modal-header">
-              <h3>Add New Item</h3>
+              <h3>{isEditing ? 'Edit Item' : 'Add New Item'}</h3>
               <button
                 type="button"
                 className="modal-close"
-                onClick={() => setShowAddForm(false)}
+                onClick={closeModal}
               >
                 ×
               </button>
             </div>
-            <form onSubmit={addItem}>
+            <form onSubmit={submitItem}>
               <div className="modal-body">
+                {/* In-modal message */}
+                {message && (
+                  <div className={`modal-alert modal-alert-${message.type}`}>
+                    <span className="modal-alert-icon">
+                      {message.type === 'success' ? '✓' : '✕'}
+                    </span>
+                    {message.text}
+                  </div>
+                )}
                 <div className="input-group">
                   <label>Item Name</label>
                   <input
@@ -193,10 +278,11 @@ export default function EditMenu() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Grilled Chicken"
                     required
+                    disabled={saving}
                   />
                 </div>
                 <div className="input-group">
-                  <label>Price ($)</label>
+                  <label>Price ({selected.symbol} {selected.code})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -205,6 +291,7 @@ export default function EditMenu() {
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder="e.g. 12.99"
                     required
+                    disabled={saving}
                   />
                 </div>
                 <div className="input-group">
@@ -215,6 +302,7 @@ export default function EditMenu() {
                     onChange={(e) => setCategory(e.target.value)}
                     placeholder="e.g. Lunch"
                     required
+                    disabled={saving}
                   />
                   <datalist id="categories">
                     {categories.map((c) => <option key={c} value={c} />)}
@@ -225,12 +313,13 @@ export default function EditMenu() {
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={() => setShowAddForm(false)}
+                  onClick={closeModal}
+                  disabled={saving}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  Add Item
+                <button type="submit" className="btn btn-primary" disabled={saving}>
+                  {saving ? 'Saving...' : isEditing ? 'Save Changes' : 'Add Item'}
                 </button>
               </div>
             </form>

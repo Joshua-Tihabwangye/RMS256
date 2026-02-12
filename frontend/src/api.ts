@@ -87,6 +87,8 @@ export const adminApi = {
       list: () => request<import('./types').MenuItem[]>('/admin/menu/food/'),
       add: (data: Partial<import('./types').MenuItem>) =>
         request<import('./types').MenuItem>('/admin/menu/food/', { method: 'POST', body: JSON.stringify(data) }),
+      update: (id: number, data: Partial<import('./types').MenuItem>) =>
+        request<import('./types').MenuItem>(`/admin/menu/food/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
       delete: (id: number) =>
         request<void>(`/admin/menu/food/${id}/`, { method: 'DELETE' }),
     },
@@ -94,6 +96,8 @@ export const adminApi = {
       list: () => request<import('./types').MenuItem[]>('/admin/menu/drinks/'),
       add: (data: Partial<import('./types').MenuItem>) =>
         request<import('./types').MenuItem>('/admin/menu/drinks/', { method: 'POST', body: JSON.stringify(data) }),
+      update: (id: number, data: Partial<import('./types').MenuItem>) =>
+        request<import('./types').MenuItem>(`/admin/menu/drinks/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
       delete: (id: number) =>
         request<void>(`/admin/menu/drinks/${id}/`, { method: 'DELETE' }),
     },
@@ -101,6 +105,8 @@ export const adminApi = {
       list: () => request<import('./types').MenuItem[]>('/admin/menu/alcohol/'),
       add: (data: Partial<import('./types').MenuItem>) =>
         request<import('./types').MenuItem>('/admin/menu/alcohol/', { method: 'POST', body: JSON.stringify(data) }),
+      update: (id: number, data: Partial<import('./types').MenuItem>) =>
+        request<import('./types').MenuItem>(`/admin/menu/alcohol/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
       delete: (id: number) =>
         request<void>(`/admin/menu/alcohol/${id}/`, { method: 'DELETE' }),
     },
@@ -108,6 +114,8 @@ export const adminApi = {
       list: () => request<import('./types').MenuItem[]>('/admin/menu/fast-food/'),
       add: (data: Partial<import('./types').MenuItem>) =>
         request<import('./types').MenuItem>('/admin/menu/fast-food/', { method: 'POST', body: JSON.stringify(data) }),
+      update: (id: number, data: Partial<import('./types').MenuItem>) =>
+        request<import('./types').MenuItem>(`/admin/menu/fast-food/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
       delete: (id: number) =>
         request<void>(`/admin/menu/fast-food/${id}/`, { method: 'DELETE' }),
     },

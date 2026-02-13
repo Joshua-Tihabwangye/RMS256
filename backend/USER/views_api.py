@@ -573,12 +573,24 @@ def api_food_items_admin(request):
     return Response(ser.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(["DELETE"])
+@api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
-def api_food_item_delete(request, pk):
+def api_food_item_detail(request, pk):
     item = FoodItem.objects.filter(pk=pk).first()
     if not item:
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        return Response(FoodItemSerializer(item).data)
+
+    if request.method in ["PUT", "PATCH"]:
+        ser = FoodItemSerializer(item, data=request.data, partial=(request.method == "PATCH"))
+        if not ser.is_valid():
+            return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+        ser.save()
+        return Response(ser.data)
+
+    # DELETE
     item.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -596,12 +608,24 @@ def api_drinks_items_admin(request):
     return Response(ser.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(["DELETE"])
+@api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
-def api_drinks_item_delete(request, pk):
+def api_drinks_item_detail(request, pk):
     item = DrinksItem.objects.filter(pk=pk).first()
     if not item:
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        return Response(DrinksItemSerializer(item).data)
+
+    if request.method in ["PUT", "PATCH"]:
+        ser = DrinksItemSerializer(item, data=request.data, partial=(request.method == "PATCH"))
+        if not ser.is_valid():
+            return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+        ser.save()
+        return Response(ser.data)
+
+    # DELETE
     item.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -619,12 +643,24 @@ def api_alcohol_items_admin(request):
     return Response(ser.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(["DELETE"])
+@api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
-def api_alcohol_item_delete(request, pk):
+def api_alcohol_item_detail(request, pk):
     item = alcoholicDrinksItem.objects.filter(pk=pk).first()
     if not item:
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        return Response(AlcoholItemSerializer(item).data)
+
+    if request.method in ["PUT", "PATCH"]:
+        ser = AlcoholItemSerializer(item, data=request.data, partial=(request.method == "PATCH"))
+        if not ser.is_valid():
+            return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+        ser.save()
+        return Response(ser.data)
+
+    # DELETE
     item.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -642,11 +678,23 @@ def api_fast_food_items_admin(request):
     return Response(ser.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(["DELETE"])
+@api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
-def api_fast_food_item_delete(request, pk):
+def api_fast_food_item_detail(request, pk):
     item = edit_fast_foodsItem.objects.filter(pk=pk).first()
     if not item:
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        return Response(FastFoodItemSerializer(item).data)
+
+    if request.method in ["PUT", "PATCH"]:
+        ser = FastFoodItemSerializer(item, data=request.data, partial=(request.method == "PATCH"))
+        if not ser.is_valid():
+            return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+        ser.save()
+        return Response(ser.data)
+
+    # DELETE
     item.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)

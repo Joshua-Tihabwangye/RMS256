@@ -42,11 +42,11 @@ urlpatterns = [
     path("admin/orders/chips/", views_api.api_orders_chips),
     # Admin menu CRUD
     path("admin/menu/food/", views_api.api_food_items_admin),
-    path("admin/menu/food/<int:pk>/", views_api.api_food_item_delete),
+    path("admin/menu/food/<int:pk>/", views_api.api_food_item_detail),
     path("admin/menu/drinks/", views_api.api_drinks_items_admin),
-    path("admin/menu/drinks/<int:pk>/", views_api.api_drinks_item_delete),
+    path("admin/menu/drinks/<int:pk>/", views_api.api_drinks_item_detail),
     path("admin/menu/alcohol/", views_api.api_alcohol_items_admin),
-    path("admin/menu/alcohol/<int:pk>/", views_api.api_alcohol_item_delete),
+    path("admin/menu/alcohol/<int:pk>/", views_api.api_alcohol_item_detail),
     path("admin/menu/fast-food/", views_api.api_fast_food_items_admin),
-    path("admin/menu/fast-food/<int:pk>/", views_api.api_fast_food_item_delete),
+    path("admin/menu/fast-food/<int:pk>/", views_api.api_fast_food_item_detail),
 ]

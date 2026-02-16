@@ -4,7 +4,7 @@ import type { MenuItem } from '../../types';
 import { adminApi, settingsApi } from '../../api';
 import CurrencyControls from '../../components/CurrencyControls';
 import { useCurrency } from '../../hooks/useCurrency';
-import { formatPriceInCurrency } from '../../utils/currency';
+import { formatPriceInCurrency, getSymbolForCode, normalizeCurrencyCode } from '../../utils/currency';
 import './EditMenu.css';
 
 const MENU_APIS: Record<string, { list: () => Promise<MenuItem[]>; add: (d: Partial<MenuItem>) => Promise<MenuItem>; update: (id: number, d: Partial<MenuItem>) => Promise<MenuItem>; delete: (id: number) => Promise<void> }> = {
@@ -43,12 +43,12 @@ export default function EditMenu() {
   }, [api]);
 
   useEffect(() => {
-    settingsApi.get().then((s) => setSelectedCode(s.currency_code)).catch(() => {});
+    settingsApi.get().then((s) => setSelectedCode(normalizeCurrencyCode(s.currency_code))).catch(() => {});
   }, [setSelectedCode]);
 
   const handleCurrencyChange = useCallback((code: string) => {
     setSelectedCode(code);
-    settingsApi.update({ currency_code: code }).catch(() => {});
+    settingsApi.update({ currency_code: code, currency_symbol: getSymbolForCode(code) }).catch(() => {});
   }, [setSelectedCode]);
 
   function openAddModal() {

@@ -34,8 +34,18 @@ export const CURRENCY_CODE_TO_SYMBOL: Record<string, string> = {
   KES: 'KSh', UGX: 'USh', TZS: 'TSh', RWF: 'RF', BIF: 'FBu', SSP: 'SSP',
 };
 
+export function normalizeCurrencyCode(code?: string | null): string {
+  const normalized = code?.trim().toUpperCase() || 'USD';
+  if (CURRENCY_CODE_TO_SYMBOL[normalized]) return normalized;
+
+  const candidates = normalized.match(/[A-Z]{3}/g) || [];
+  const knownCandidate = candidates.find((candidate) => CURRENCY_CODE_TO_SYMBOL[candidate]);
+  return knownCandidate || candidates[0] || normalized;
+}
+
 export function getSymbolForCode(code: string): string {
-  return CURRENCY_CODE_TO_SYMBOL[code?.toUpperCase()] || code || '$';
+  const normalized = normalizeCurrencyCode(code);
+  return CURRENCY_CODE_TO_SYMBOL[normalized] || normalized || '$';
 }
 
 function isBrowser() {
@@ -97,15 +107,10 @@ export function formatCurrency(value: number, currency: Currency): string {
 /** Format a value that is already in the given currency (no conversion). */
 export function formatPriceInCurrency(value: number, symbol: string, code: string): string {
   const safeValue = Number.isFinite(value) ? value : 0;
-  try {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: code,
-      maximumFractionDigits: 2,
-    }).format(safeValue);
-  } catch {
-    return `${symbol}${safeValue.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
-  }
+  const normalizedCode = normalizeCurrencyCode(code);
+  const resolvedSymbol = (symbol?.trim() || getSymbolForCode(normalizedCode)).trim();
+  const separator = /^[A-Za-z]+$/.test(resolvedSymbol) ? ' ' : '';
+  return `${resolvedSymbol}${separator}${safeValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 export function getDefaultCurrencies() {

@@ -36,8 +36,11 @@ async function request<T>(
       window.location.href = '/admin/login';
       return new Promise(() => {});
     }
-    const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(Array.isArray(err.detail) ? err.detail[0] : err.detail || err.username?.[0] || err.email?.[0] || res.statusText);
+    const err = await res.json().catch(() => ({ detail: '' }));
+    const message = Array.isArray(err.detail)
+      ? err.detail[0]
+      : err.detail || err.username?.[0] || err.email?.[0] || res.statusText || `Request failed (${res.status})`;
+    throw new Error(message);
   }
   if (res.status === 204) return undefined as T;
   const raw = await res.text();
@@ -72,7 +75,7 @@ export interface RestaurantSettingsResponse {
 export const settingsApi = {
   get: () =>
     request<RestaurantSettingsResponse>(
-      `/settings/?_=${Date.now()}`,
+      '/settings/',
       { cache: 'no-store' },
       { useAuth: false }
     ),

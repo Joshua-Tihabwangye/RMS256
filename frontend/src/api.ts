@@ -7,12 +7,16 @@ function getToken(): string | null {
   return localStorage.getItem('access');
 }
 
+type RequestConfig = { useAuth?: boolean };
+
 async function request<T>(
   path: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  config?: RequestConfig
 ): Promise<T> {
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
-  const token = getToken();
+  const useAuth = config?.useAuth !== false;
+  const token = useAuth ? getToken() : null;
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
@@ -27,53 +31,38 @@ async function request<T>(
   return res.json();
 }
 
-// Auth
+// Auth (signup/signin/forgot/reset are public; signout uses token)
 export const authApi = {
   signup: (data: { username: string; email: string; password: string }) =>
-    request<import('./types').AuthResponse>('/auth/signup/', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }),
+    request<import('./types').AuthResponse>('/auth/signup/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
   signin: (data: { username: string; password: string }) =>
-    request<import('./types').AuthResponse>('/auth/signin/', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }),
+    request<import('./types').AuthResponse>('/auth/signin/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
   signout: (refresh: string) =>
-    request<{ detail: string }>('/auth/signout/', {
-      method: 'POST',
-      body: JSON.stringify({ refresh }),
-    }),
+    request<{ detail: string }>('/auth/signout/', { method: 'POST', body: JSON.stringify({ refresh }) }),
   forgotPassword: (email: string) =>
-    request<{ detail: string }>('/auth/forgot-password/', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    }),
+    request<{ detail: string }>('/auth/forgot-password/', { method: 'POST', body: JSON.stringify({ email }) }, { useAuth: false }),
   resetPassword: (data: { uidb64: string; token: string; password: string; confirm_password: string }) =>
-    request<{ detail: string }>('/auth/reset-password/', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }),
+    request<{ detail: string }>('/auth/reset-password/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
 };
 
-// Menu (public)
+// Menu (public – do not send auth token so expired tokens don’t break menu load)
 export const menuApi = {
-  food: () => request<import('./types').MenuItem[]>('/menu/food/'),
-  drinks: () => request<import('./types').MenuItem[]>('/menu/drinks/'),
-  alcohol: () => request<import('./types').MenuItem[]>('/menu/alcohol/'),
-  fastFood: () => request<import('./types').MenuItem[]>('/menu/fast-food/'),
+  food: () => request<import('./types').MenuItem[]>('/menu/food/', {}, { useAuth: false }),
+  drinks: () => request<import('./types').MenuItem[]>('/menu/drinks/', {}, { useAuth: false }),
+  alcohol: () => request<import('./types').MenuItem[]>('/menu/alcohol/', {}, { useAuth: false }),
+  fastFood: () => request<import('./types').MenuItem[]>('/menu/fast-food/', {}, { useAuth: false }),
 };
 
-// Place order (public)
+// Place order (public – no auth required)
 export const ordersApi = {
   food: (data: import('./types').PlaceOrderPayload) =>
-    request<{ detail: string }>('/orders/food/', { method: 'POST', body: JSON.stringify(data) }),
+    request<{ detail: string }>('/orders/food/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
   drinks: (data: import('./types').PlaceOrderPayload) =>
-    request<{ detail: string }>('/orders/drinks/', { method: 'POST', body: JSON.stringify(data) }),
+    request<{ detail: string }>('/orders/drinks/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
   alcohol: (data: import('./types').PlaceOrderPayload) =>
-    request<{ detail: string }>('/orders/alcohol/', { method: 'POST', body: JSON.stringify(data) }),
+    request<{ detail: string }>('/orders/alcohol/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
   fastFood: (data: import('./types').PlaceOrderPayload) =>
-    request<{ detail: string }>('/orders/fast-food/', { method: 'POST', body: JSON.stringify(data) }),
+    request<{ detail: string }>('/orders/fast-food/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
 };
 
 // Admin

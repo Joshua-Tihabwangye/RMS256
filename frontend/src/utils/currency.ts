@@ -84,6 +84,20 @@ export function formatCurrency(value: number, currency: Currency): string {
   }
 }
 
+/** Format a value that is already in the given currency (no conversion). */
+export function formatPriceInCurrency(value: number, symbol: string, code: string): string {
+  const safeValue = Number.isFinite(value) ? value : 0;
+  try {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: code,
+      maximumFractionDigits: 2,
+    }).format(safeValue);
+  } catch {
+    return `${symbol}${safeValue.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+  }
+}
+
 export function getDefaultCurrencies() {
   return PRESET_CURRENCIES;
 }

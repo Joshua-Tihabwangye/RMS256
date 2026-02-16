@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import type { MenuItem } from '../../types';
-import { menuApi, ordersApi } from '../../api';
+import { menuApi, ordersApi, settingsApi } from '../../api';
+import { formatPriceInCurrency } from '../../utils/currency';
 import { CATEGORY_DISPLAY_ORDER, getCategoryLabel, type MenuType } from './menuConfig';
 import './OrderMenu.css';
 
@@ -63,13 +64,23 @@ export default function OrderMenu() {
   const [selected, setSelected] = useState<{ item: MenuItem; qty: number } | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [currency, setCurrency] = useState<{ symbol: string; code: string } | null>(null);
   const config = type ? MENU_CONFIG[type] : null;
+
+  useEffect(() => {
+    settingsApi.get().then((s) => setCurrency({ symbol: s.currency_symbol, code: s.currency_code })).catch(() => setCurrency({ symbol: '$', code: 'USD' }));
+  }, []);
 
   useEffect(() => {
     if (!config) return;
     setLoading(true);
     config.api().then(setItems).finally(() => setLoading(false));
   }, [config]);
+
+  const formatPrice = useCallback((value: number) => {
+    if (currency) return formatPriceInCurrency(value, currency.symbol, currency.code);
+    return `$${Number(value).toFixed(2)}`;
+  }, [currency]);
 
   const orderedSections = useMemo(() => {
     if (!type) return [];
@@ -230,7 +241,7 @@ export default function OrderMenu() {
                     <div className="item-info">
                       <span className="item-name">{item.name}</span>
                     </div>
-                    <span className="item-price">${Number(item.price).toFixed(2)}</span>
+                    <span className="item-price">{formatPrice(Number(item.price))}</span>
                     <button
                       type="button"
                       className="btn btn-primary btn-order"
@@ -260,7 +271,7 @@ export default function OrderMenu() {
             <div className="order-modal-body">
               <div className="order-modal-item">
                 <span className="order-modal-item-name">{selected.item.name}</span>
-                <span className="order-modal-item-price">${Number(selected.item.price).toFixed(2)} each</span>
+                <span className="order-modal-item-price">{formatPrice(Number(selected.item.price))} each</span>
               </div>
               <div className="input-group">
                 <label>Quantity (servings)</label>
@@ -292,7 +303,7 @@ export default function OrderMenu() {
               </div>
               <div className="order-modal-total">
                 <span className="label">Total:</span>
-                <span className="value">${(Number(selected.item.price) * selected.qty).toFixed(2)}</span>
+                <span className="value">{formatPrice(Number(selected.item.price) * selected.qty)}</span>
               </div>
             </div>
             <div className="order-modal-footer">

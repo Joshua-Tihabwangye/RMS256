@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import type { MenuItem } from '../../types';
-import { adminApi } from '../../api';
+import { adminApi, settingsApi } from '../../api';
 import CurrencyControls from '../../components/CurrencyControls';
 import { useCurrency } from '../../hooks/useCurrency';
-import { convertFromBase, convertToBase, formatCurrency } from '../../utils/currency';
+import { formatPriceInCurrency } from '../../utils/currency';
 import './EditMenu.css';
 
 const MENU_APIS: Record<string, { list: () => Promise<MenuItem[]>; add: (d: Partial<MenuItem>) => Promise<MenuItem>; update: (id: number, d: Partial<MenuItem>) => Promise<MenuItem>; delete: (id: number) => Promise<void> }> = {
@@ -42,6 +42,15 @@ export default function EditMenu() {
     api.list().then(setItems).finally(() => setLoading(false));
   }, [api]);
 
+  useEffect(() => {
+    settingsApi.get().then((s) => setSelectedCode(s.currency_code)).catch(() => {});
+  }, [setSelectedCode]);
+
+  const handleCurrencyChange = useCallback((code: string) => {
+    setSelectedCode(code);
+    settingsApi.update({ currency_code: code }).catch(() => {});
+  }, [setSelectedCode]);
+
   function openAddModal() {
     setEditingItem(null);
     setName('');
@@ -52,11 +61,11 @@ export default function EditMenu() {
   }
 
   function openEditModal(item: MenuItem) {
-    const converted = convertFromBase(Number(item.price), selected);
     setEditingItem(item);
     setName(item.name);
     setCategory(item.category);
-    setPrice(Number.isFinite(converted) ? converted.toFixed(2) : '');
+    const p = Number(item.price);
+    setPrice(Number.isFinite(p) ? (p % 1 === 0 ? String(p) : p.toFixed(2)) : '');
     setMessage(null);
     setModalMode('edit');
   }
@@ -71,12 +80,12 @@ export default function EditMenu() {
     e.preventDefault();
     if (!api || !name.trim() || !price.trim() || !category.trim()) return;
     const priceValue = Number(price);
-    if (!Number.isFinite(priceValue)) {
+    if (!Number.isFinite(priceValue) || priceValue < 0) {
       setMessage({ type: 'error', text: 'Enter a valid price.' });
       return;
     }
-    const basePrice = convertToBase(priceValue, selected);
-    const payload = { name: name.trim(), price: basePrice.toFixed(2), category: category.trim() };
+    const priceToSave = parseFloat(priceValue.toFixed(2));
+    const payload = { name: name.trim(), price: String(priceToSave), category: category.trim() };
     setMessage(null);
     setSaving(true);
     try {
@@ -155,7 +164,7 @@ export default function EditMenu() {
         <CurrencyControls
           currencies={currencies}
           selectedCode={selectedCode}
-          onChange={setSelectedCode}
+          onChange={handleCurrencyChange}
         />
       </div>
 
@@ -213,7 +222,7 @@ export default function EditMenu() {
                     </td>
                     <td>
                       <span className="price-badge">
-                        {formatCurrency(convertFromBase(Number(item.price), selected), selected)}
+                        {formatPriceInCurrency(Number(item.price), selected.symbol, selected.code)}
                       </span>
                     </td>
                     <td>

@@ -68,7 +68,25 @@ export default function OrderMenu() {
   const config = type ? MENU_CONFIG[type] : null;
 
   useEffect(() => {
-    settingsApi.get().then((s) => setCurrency({ symbol: s.currency_symbol, code: s.currency_code })).catch(() => setCurrency({ symbol: '$', code: 'USD' }));
+    let cancelled = false;
+    const fetchSettings = (attempt = 0) => {
+      settingsApi
+        .get()
+        .then((s) => {
+          if (!cancelled && s) {
+            setCurrency({
+              symbol: s.currency_symbol?.trim() || '$',
+              code: (s.currency_code?.trim() || 'USD').toUpperCase(),
+            });
+          }
+        })
+        .catch(() => {
+          if (!cancelled && attempt < 2) setTimeout(() => fetchSettings(attempt + 1), 600);
+          else if (!cancelled) setCurrency({ symbol: '$', code: 'USD' });
+        });
+    };
+    fetchSettings();
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {

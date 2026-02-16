@@ -22,7 +22,7 @@ from .models import (
     FoodItem, DrinksItem, alcoholicDrinksItem, edit_fast_foodsItem,
     Breakfast, Lunch, Supper, Soda, Water, Juices, Energydrink,
     Beers, Wines, Whiskeys, Burgers, Taccos, Pizza, Sand_Wich, Chips,
-    CompletedOrder,
+    CompletedOrder, RestaurantSettings,
 )
 from .serializers import (
     FoodItemSerializer, DrinksItemSerializer, AlcoholItemSerializer,
@@ -217,6 +217,36 @@ def api_signout(request):
         pass
     logout(request)
     return Response({"detail": "Logged out."})
+
+
+# ----- Restaurant settings (public GET for client; admin PATCH) -----
+CURRENCY_SYMBOLS = {
+    "USD": "$", "EUR": "€", "GBP": "£", "JPY": "¥", "CHF": "CHF", "CAD": "C$", "AUD": "A$", "CNY": "¥",
+    "KES": "KSh", "UGX": "USh", "TZS": "TSh", "RWF": "RF", "BIF": "FBu", "SSP": "SSP",
+}
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([AllowAny])  # GET public; PATCH checks auth inside
+def api_settings(request):
+    s = RestaurantSettings.get_settings()
+    if request.method == "PATCH":
+        if not request.user or not request.user.is_authenticated:
+            return Response({"detail": "Authentication required."}, status=status.HTTP_401_UNAUTHORIZED)
+        code = request.data.get("currency_code")
+        symbol = request.data.get("currency_symbol")
+        if code is not None:
+            s.currency_code = str(code).strip().upper() or "USD"
+        if symbol is not None:
+            s.currency_symbol = str(symbol).strip() or CURRENCY_SYMBOLS.get(s.currency_code, "$")
+        elif code is not None:
+            s.currency_symbol = CURRENCY_SYMBOLS.get(s.currency_code, "$")
+        s.save()
+    symbol = CURRENCY_SYMBOLS.get(s.currency_code, s.currency_symbol or "$")
+    return Response({
+        "currency_code": s.currency_code,
+        "currency_symbol": symbol,
+    })
 
 
 # ----- Menu (public) -----

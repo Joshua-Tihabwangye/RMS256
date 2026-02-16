@@ -11,6 +11,8 @@ urlpatterns = [
     path("auth/signout/", views_api.api_signout),
     path("auth/forgot-password/", views_api.api_forgot_password),
     path("auth/reset-password/", views_api.api_reset_password),
+    # Restaurant settings (GET public; PATCH requires auth)
+    path("settings/", views_api.api_settings),
     # Menu (public)
     path("menu/food/", views_api.api_food_items),
     path("menu/drinks/", views_api.api_drinks_items),

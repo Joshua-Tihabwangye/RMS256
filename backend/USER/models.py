@@ -464,3 +464,21 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.message
+
+
+# Single-row settings for restaurant (currency used for all menu prices and client display)
+class RestaurantSettings(models.Model):
+    currency_code = models.CharField(max_length=10, default="USD")
+    currency_symbol = models.CharField(max_length=10, default="$")
+
+    class Meta:
+        verbose_name_plural = "Restaurant settings"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_settings(cls):
+        obj, _ = cls.objects.get_or_create(pk=1, defaults={"currency_code": "USD", "currency_symbol": "$"})
+        return obj

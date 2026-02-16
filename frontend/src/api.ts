@@ -51,7 +51,23 @@ export const authApi = {
     request<{ detail: string }>('/auth/reset-password/', { method: 'POST', body: JSON.stringify(data) }, { useAuth: false }),
 };
 
-// Menu (public – do not send auth token so expired tokens don’t break menu load)
+// Restaurant settings (GET public – do not send auth token so expired tokens don’t break menu load)
+export interface RestaurantSettingsResponse {
+  currency_code: string;
+  currency_symbol: string;
+}
+
+export const settingsApi = {
+  get: () =>
+    request<RestaurantSettingsResponse>('/settings/', {}, { useAuth: false }),
+  update: (data: { currency_code?: string; currency_symbol?: string }) =>
+    request<RestaurantSettingsResponse>('/settings/', {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
+};
+
+// Menu (public – do not send auth token so expired tokens don't break menu load)
 export const menuApi = {
   food: () => request<import('./types').MenuItem[]>('/menu/food/', {}, { useAuth: false }),
   drinks: () => request<import('./types').MenuItem[]>('/menu/drinks/', {}, { useAuth: false }),

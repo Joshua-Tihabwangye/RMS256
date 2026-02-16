@@ -1,4 +1,6 @@
-const RAW_API_BASE = import.meta.env.VITE_API_BASE_URL as string | undefined;
+const RAW_API_BASE =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined)
+  || (import.meta.env.VITE_API_BASE as string | undefined);
 const API_BASE = (RAW_API_BASE && RAW_API_BASE.trim().length > 0
   ? RAW_API_BASE.trim().replace(/\/+$/, '')
   : '/api');
@@ -17,10 +19,14 @@ async function request<T>(
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
   const useAuth = config?.useAuth !== false;
   const token = useAuth ? getToken() : null;
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
+  const headers: Record<string, string> = {
     ...(options.headers as Record<string, string>),
   };
+  const hasBody = options.body !== undefined && options.body !== null;
+  const hasContentType = Object.keys(headers).some((key) => key.toLowerCase() === 'content-type');
+  if (hasBody && !hasContentType && !(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
   if (token) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(url, { ...options, headers });
   if (!res.ok) {
@@ -34,7 +40,13 @@ async function request<T>(
     throw new Error(Array.isArray(err.detail) ? err.detail[0] : err.detail || err.username?.[0] || err.email?.[0] || res.statusText);
   }
   if (res.status === 204) return undefined as T;
-  return res.json();
+  const raw = await res.text();
+  if (!raw) return undefined as T;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    throw new Error(`Invalid JSON response from ${url}`);
+  }
 }
 
 // Auth (signup/signin/forgot/reset are public; signout uses token)
@@ -59,7 +71,11 @@ export interface RestaurantSettingsResponse {
 
 export const settingsApi = {
   get: () =>
-    request<RestaurantSettingsResponse>('/settings/', {}, { useAuth: false }),
+    request<RestaurantSettingsResponse>(
+      `/settings/?_=${Date.now()}`,
+      { cache: 'no-store' },
+      { useAuth: false }
+    ),
   update: (data: { currency_code?: string; currency_symbol?: string }) =>
     request<RestaurantSettingsResponse>('/settings/', {
       method: 'PATCH',

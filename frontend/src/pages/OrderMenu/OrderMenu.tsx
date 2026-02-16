@@ -5,9 +5,7 @@ import { menuApi, ordersApi, settingsApi } from '../../api';
 import {
   formatPriceInCurrency,
   getSymbolForCode,
-  loadSelectedCurrencyCode,
   normalizeCurrencyCode,
-  saveSelectedCurrencyCode,
 } from '../../utils/currency';
 import { CATEGORY_DISPLAY_ORDER, getCategoryLabel, type MenuType } from './menuConfig';
 import './OrderMenu.css';
@@ -61,11 +59,6 @@ interface Toast {
   message: string;
 }
 
-function getInitialCurrency() {
-  const code = normalizeCurrencyCode(loadSelectedCurrencyCode());
-  return { symbol: getSymbolForCode(code), code };
-}
-
 export default function OrderMenu() {
   const path = useLocation().pathname.replace(/^\//, '');
   const type = ROUTE_TO_TYPE[path] ?? null;
@@ -75,7 +68,7 @@ export default function OrderMenu() {
   const [selected, setSelected] = useState<{ item: MenuItem; qty: number } | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [submitting, setSubmitting] = useState(false);
-  const [currency, setCurrency] = useState<{ symbol: string; code: string }>(getInitialCurrency);
+  const [currency, setCurrency] = useState<{ symbol: string; code: string } | null>(null);
   const config = type ? MENU_CONFIG[type] : null;
 
   useEffect(() => {
@@ -85,10 +78,9 @@ export default function OrderMenu() {
         .get()
         .then((s) => {
           if (!cancelled && s) {
-            const code = normalizeCurrencyCode(s.currency_code || loadSelectedCurrencyCode());
+            const code = normalizeCurrencyCode(s.currency_code);
             const symbol = (s.currency_symbol?.trim() || getSymbolForCode(code));
             setCurrency({ symbol, code });
-            saveSelectedCurrencyCode(code);
           }
         })
         .catch(() => {
@@ -106,6 +98,7 @@ export default function OrderMenu() {
   }, [config]);
 
   const formatPrice = useCallback((value: number) => {
+    if (!currency) return Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     return formatPriceInCurrency(value, currency.symbol, currency.code);
   }, [currency]);
 
@@ -219,9 +212,11 @@ export default function OrderMenu() {
           <span className="order-menu-badge">{type?.replace('-', ' ')}</span>
           <h1>{config.title}</h1>
           <p className="order-menu-subtitle">{config.subtitle}</p>
-          <p className="order-menu-currency-badge" aria-label={`Prices in ${currency.code}`}>
-            Prices in {currency.symbol} ({currency.code})
-          </p>
+          {currency && (
+            <p className="order-menu-currency-badge" aria-label={`Prices in ${currency.code}`}>
+              Prices in {currency.symbol} ({currency.code})
+            </p>
+          )}
         </div>
       </div>
 

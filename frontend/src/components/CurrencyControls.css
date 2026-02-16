@@ -58,6 +58,11 @@
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
 
+.currency-select:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .currency-select-icon {
   position: absolute;
   right: 0.75rem;

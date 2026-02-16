@@ -34,6 +34,7 @@ export default function EditMenu() {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [currencySaving, setCurrencySaving] = useState(false);
   const api = type ? MENU_APIS[type] : null;
   const config = type ? TITLES[type] : null;
 
@@ -43,13 +44,55 @@ export default function EditMenu() {
   }, [api]);
 
   useEffect(() => {
-    settingsApi.get().then((s) => setSelectedCode(normalizeCurrencyCode(s.currency_code))).catch(() => {});
+    let cancelled = false;
+    settingsApi
+      .get()
+      .then((s) => {
+        if (cancelled) return;
+        setSelectedCode(normalizeCurrencyCode(s.currency_code));
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setMessage({
+          type: 'error',
+          text: err instanceof Error
+            ? `Failed to load global currency: ${err.message}`
+            : 'Failed to load global currency.',
+        });
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [setSelectedCode]);
 
-  const handleCurrencyChange = useCallback((code: string) => {
-    setSelectedCode(code);
-    settingsApi.update({ currency_code: code, currency_symbol: getSymbolForCode(code) }).catch(() => {});
-  }, [setSelectedCode]);
+  const handleCurrencyChange = useCallback(async (code: string) => {
+    const normalized = normalizeCurrencyCode(code);
+    const previousCode = selectedCode;
+    setCurrencySaving(true);
+    try {
+      const updated = await settingsApi.update({
+        currency_code: normalized,
+        currency_symbol: getSymbolForCode(normalized),
+      });
+      const savedCode = normalizeCurrencyCode(updated.currency_code || normalized);
+      setSelectedCode(savedCode);
+      setMessage({
+        type: 'success',
+        text: `Currency saved globally: ${getSymbolForCode(savedCode)} ${savedCode}`,
+      });
+      setTimeout(() => setMessage(null), 2500);
+    } catch (err) {
+      setSelectedCode(previousCode);
+      setMessage({
+        type: 'error',
+        text: err instanceof Error
+          ? `Currency was not saved globally: ${err.message}`
+          : 'Currency was not saved globally.',
+      });
+    } finally {
+      setCurrencySaving(false);
+    }
+  }, [selectedCode, setSelectedCode]);
 
   function openAddModal() {
     setEditingItem(null);
@@ -165,6 +208,7 @@ export default function EditMenu() {
           currencies={currencies}
           selectedCode={selectedCode}
           onChange={handleCurrencyChange}
+          disabled={currencySaving}
         />
       </div>
 

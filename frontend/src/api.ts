@@ -24,6 +24,12 @@ async function request<T>(
   if (token) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(url, { ...options, headers });
   if (!res.ok) {
+    if (res.status === 401 && useAuth && token) {
+      localStorage.removeItem('access');
+      localStorage.removeItem('refresh');
+      window.location.href = '/admin/login';
+      return new Promise(() => {});
+    }
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(Array.isArray(err.detail) ? err.detail[0] : err.detail || err.username?.[0] || err.email?.[0] || res.statusText);
   }

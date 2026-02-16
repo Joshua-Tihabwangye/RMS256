@@ -92,6 +92,13 @@
   opacity: 0.9;
 }
 
+.order-menu-currency-badge {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.95;
+  font-weight: 600;
+}
+
 /* ===== MENU SECTIONS ===== */
 .order-menu-sections {
   display: flex;

@@ -28,6 +28,16 @@ export const PRESET_CURRENCIES: Currency[] = [
   { code: 'SSP', symbol: 'SSP', rate: 1150, name: 'South Sudanese Pound' },
 ];
 
+/** Symbol for a currency code (for client-side fallback when API returns code only). */
+export const CURRENCY_CODE_TO_SYMBOL: Record<string, string> = {
+  USD: '$', EUR: '€', GBP: '£', JPY: '¥', CHF: 'CHF', CAD: 'C$', AUD: 'A$', CNY: '¥',
+  KES: 'KSh', UGX: 'USh', TZS: 'TSh', RWF: 'RF', BIF: 'FBu', SSP: 'SSP',
+};
+
+export function getSymbolForCode(code: string): string {
+  return CURRENCY_CODE_TO_SYMBOL[code?.toUpperCase()] || code || '$';
+}
+
 function isBrowser() {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 }

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import type { MenuItem } from '../../types';
 import { menuApi, ordersApi, settingsApi } from '../../api';
-import { formatPriceInCurrency } from '../../utils/currency';
+import { formatPriceInCurrency, getSymbolForCode } from '../../utils/currency';
 import { CATEGORY_DISPLAY_ORDER, getCategoryLabel, type MenuType } from './menuConfig';
 import './OrderMenu.css';
 
@@ -74,10 +74,9 @@ export default function OrderMenu() {
         .get()
         .then((s) => {
           if (!cancelled && s) {
-            setCurrency({
-              symbol: s.currency_symbol?.trim() || '$',
-              code: (s.currency_code?.trim() || 'USD').toUpperCase(),
-            });
+            const code = (s.currency_code?.trim() || 'USD').toUpperCase();
+            const symbol = (s.currency_symbol?.trim() || getSymbolForCode(code));
+            setCurrency({ symbol, code });
           }
         })
         .catch(() => {
@@ -210,6 +209,11 @@ export default function OrderMenu() {
           <span className="order-menu-badge">{type?.replace('-', ' ')}</span>
           <h1>{config.title}</h1>
           <p className="order-menu-subtitle">{config.subtitle}</p>
+          {currency && (
+            <p className="order-menu-currency-badge" aria-label={`Prices in ${currency.code}`}>
+              Prices in {currency.symbol} ({currency.code})
+            </p>
+          )}
         </div>
       </div>
 

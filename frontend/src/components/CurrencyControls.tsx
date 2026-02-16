@@ -6,6 +6,7 @@ interface CurrencyControlsProps {
   selectedCode: string;
   onChange: (code: string) => void;
   compact?: boolean;
+  disabled?: boolean;
 }
 
 export default function CurrencyControls({
@@ -13,6 +14,7 @@ export default function CurrencyControls({
   selectedCode,
   onChange,
   compact = false,
+  disabled = false,
 }: CurrencyControlsProps) {
   const majorCodes = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'CNY'];
   const major = currencies.filter((c) => majorCodes.includes(c.code));
@@ -27,6 +29,7 @@ export default function CurrencyControls({
             className="currency-select"
             value={selectedCode}
             onChange={(e) => onChange(e.target.value)}
+            disabled={disabled}
           >
             <optgroup label="Major Currencies">
               {major.map((c) => (
